@@ -6,14 +6,21 @@ public class CustomerAccount {
 	private String LastName; 
 	private String Password; 
 	private boolean isOnline = false; 
-	// list of bank accounts here 
+	private BankAccount BAccountList[];
 	// address object here 
+	private int numBankAccounts; 
+	
+	
+	
+	
 	
 	public CustomerAccount(String E, String FN, String LN, String Pass) {
 		this.Email = E;
 		this.FirstName = FN; 
 		this.LastName = LN; 
 		this.Password = Pass;
+		this.numBankAccounts = 0;
+		BAccountList = new BankAccount[7];
 		
 	} 
 	
@@ -54,7 +61,27 @@ public class CustomerAccount {
 	}
 	
 	
-	
+	public void AddBankAccount(BankAccount Account) {
+		
+		
+		if (numBankAccounts >= BAccountList.length) {
+			BankAccount[] newArray = new BankAccount[BAccountList.length * 2];
+			
+			for (int i = 0; i < BAccountList.length; i++) {
+		        newArray[i] = BAccountList[i];
+		    }
+			
+			BAccountList = newArray;
+			
+		}
+		
+		
+		BAccountList[numBankAccounts] = Account;
+		
+		numBankAccounts += 1;
+		
+		
+	}
 	
 	
 	

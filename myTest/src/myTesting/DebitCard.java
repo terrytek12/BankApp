@@ -1,13 +1,14 @@
 package myTesting;
 import java.util.Date;
+import java.util.Random;
 
 public class DebitCard {
-	private int sixteenDigits; 
+	private String sixteenDigits; 
 	private String FistName; 
 	private String LastName; 
 	private Date openeded; 
 	private String expiration; 
-	private int cvv; 
+	private String cvv; 
 	private int pin; 
 	
 	
@@ -16,15 +17,45 @@ public class DebitCard {
 		this.LastName = LN; 
 		this.openeded = new Date();
 		// set exp to 3 years after opened; 
-		// set 16 digits;
-		//set cvv; 
+		this.sixteenDigits = generateCardNumber();
+		this.cvv = generateCvvNumber();
 		this.pin = p; 
 		
 		
 	}
+	
+	
+	
+	private String generateCardNumber() {
+		Random random = new Random();
+		StringBuilder cardNum = new StringBuilder();
+		
+		for (int n = 0; n < 16; n++) {
+			int digit = random.nextInt(10);
+			cardNum.append(digit);
+		}
+		
+		return cardNum.toString();
+	}
+	
+	private String generateCvvNumber() {
+		Random random = new Random();
+		StringBuilder CVVnum = new StringBuilder();
+		
+		for (int n = 0; n < 3; n++) {
+			int digit = random.nextInt(10);
+			CVVnum.append(digit);
+		}
+		
+		return CVVnum.toString();
+	}
+	
+	
+	
+	
 
 
-	public int getSixteenDigits() {
+	public String getSixteenDigits() {
 		return sixteenDigits;
 	}
 
@@ -49,7 +80,7 @@ public class DebitCard {
 	}
 
 
-	public int getCvv() {
+	public String getCvv() {
 		return cvv;
 	}
 
