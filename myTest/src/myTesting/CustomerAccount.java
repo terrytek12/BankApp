@@ -85,7 +85,41 @@ public class CustomerAccount {
 	
 	
 	
+	public void removeBankAccount(int id) {
+		
+		
+		for (int n = 0; n < numBankAccounts; n++) {
+			if(BAccountList[n].getId() == id) {
+				for(int j = n; j < numBankAccounts; j++) {
+					BAccountList[j] = BAccountList[j+1];
+				}
+				
+				
+				BAccountList[numBankAccounts - 1] = null;
+				numBankAccounts--;
+			}
+		}
+		
+		
+		
+		
+	}
 	
+	public BankAccount getBankAccount(int id) {
+		BankAccount result = null;
+		
+		for (int n = 0; n < numBankAccounts; n++) {
+			if(BAccountList[n].getId() == id) {
+				result = BAccountList[n];
+			}
+		}
+	
+		return result; 
+	
+	}
+	
+	
+		
 	
 	
 }
