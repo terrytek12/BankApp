@@ -16,7 +16,7 @@ public class BankAccount {
 	
 	
 	
-	public BankAccount(int p, int bal, String FN, String LN) {
+	public BankAccount(int p, int bal, String FN, String LN, int id) {
 		// need to make id unique to each instance 
 		this.pin = p; 
 		this.balance = bal;
@@ -26,7 +26,7 @@ public class BankAccount {
 		this.LastName = LN; 
 		Log = new String[7];
 		this.LogCount = 0;
-	}
+		this.id = id;	}
 
 	public int getId() {
 		return id;

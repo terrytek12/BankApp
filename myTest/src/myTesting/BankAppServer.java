@@ -7,8 +7,15 @@ public class BankAppServer {
 	
 	public static void main(String[] args) {
 		
-		 //CustomerAccount MasterList[];
+		 CustomerAccount[] MasterList = new CustomerAccount[1];
 		
+		 BankAccount TestBa = new BankAccount(1234, 100, "John", "Doe", 1);
+		 
+		 CustomerAccount TestAccount = new CustomerAccount("TestEmail@gmail.com", "John", "Doe", "pass");
+		 
+		 TestAccount.AddBankAccount(TestBa);
+		 
+		 MasterList[0] = TestAccount;
 		
 		
 		 ServerSocket serverSocket = null;
@@ -18,7 +25,7 @@ public class BankAppServer {
 		 
 		 try { 
 			 
-			 serverSocket = new ServerSocket(3000);
+			 serverSocket = new ServerSocket(3005);
 			 serverSocket.setReuseAddress(true);
 		 
 			 
@@ -31,7 +38,7 @@ public class BankAppServer {
 				 
 				 System.out.println("New client connected" + client.getInetAddress().getHostAddress());
 				 
-				 ClientHandler clientSock = new ClientHandler(client);
+				 ClientHandler clientSock = new ClientHandler(client, MasterList);
 				 
 				 new Thread(clientSock).start();
 				 
@@ -60,35 +67,58 @@ public class BankAppServer {
 	private static class ClientHandler implements Runnable {
 		
 		private Socket clientSocket;
+		private CustomerAccount[] bigList;
 		
 		
-		public ClientHandler(Socket socket) {
+		public ClientHandler(Socket socket, CustomerAccount[] masterList) {
 			this.clientSocket = socket;
+			this.bigList = masterList;
 		}
 		
 		
 		public void run() {
-			PrintWriter out = null;
-			BufferedReader in = null;
 			
-			try { 
+			
+			try (ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
+		             ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream())) {
+				
+				System.out.println("Hello I am here");
+				
+				Object obj;
 				
 				
-				out = new PrintWriter(clientSocket.getOutputStream(), true); 
 				
-				in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				while ((obj = in.readObject()) != null) {
+	                if (obj instanceof Message) {
+	                    Message message = (Message) obj;
+	                    // Process the received message
+	                    System.out.println("Received from client: " + message.getType() + message.getText());
+	                    
+	                    BankAccount temp = bigList[0].getBankAccount(1);
+	                    
+	                    int amount = Integer.parseInt(message.getText());
+	                    
+	                    temp.deposit(amount);
+	                    
+	                    System.out.println(temp.getBalance());
+
+	                    // Respond back to the client
+	                    // Example: Echoing the received message
+	                    out.writeObject(message);
+	                }
+	            } 
 				
 				
-				String line; 
 				
-				while ((line = in.readLine())  != null) {
-					System.out.printf("Sent from the client: %s\n", line);
-					out.println(line);
-				}
+				
+				
 				
 				
 				
 			} catch(IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -96,15 +126,7 @@ public class BankAppServer {
 				
 				try {
 					
-					if (out != null) {
-						out.close();
-					}
-					
-					if (in != null) {
-						in.close();
-						clientSocket.close();
-					}
-					
+					clientSocket.close();
 					
 				} catch (IOException e) {
 					e.printStackTrace();
