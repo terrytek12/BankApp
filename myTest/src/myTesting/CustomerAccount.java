@@ -7,7 +7,7 @@ public class CustomerAccount {
 	private String Password; 
 	private boolean isOnline = false; 
 	private BankAccount BAccountList[];
-	public	Address address; 
+	//public	Address address; 
 	private int numBankAccounts; 
 	
 	
@@ -20,7 +20,7 @@ public class CustomerAccount {
 		this.LastName = LN; 
 		this.Password = Pass;
 		this.numBankAccounts = 0;
-		this.address = new Address();
+		//this.address = new Address();
 		BAccountList = new BankAccount[7];
 		
 	} 
@@ -44,6 +44,8 @@ public class CustomerAccount {
 	public String getPassword() {
 		return Password;
 	}
+	
+	/*
 	
 	public String getStreetAddress() {
 		return this.address.getStreetAddress();
@@ -73,6 +75,9 @@ public class CustomerAccount {
 		return this.address.getZip();
 	}
 	
+	*/
+	
+	
 	public boolean isOnline() {
 		return isOnline;
 	}
@@ -88,6 +93,8 @@ public class CustomerAccount {
 	public void setOnline(boolean isOnline) {
 		this.isOnline = isOnline;
 	}
+	
+	/*
 
 	public void setStreetNumber(int nmbr) {
 		this.address.setStreetNumber(nmbr);
@@ -116,7 +123,7 @@ public class CustomerAccount {
 	public void setZip(int zip) {
 		this.address.setZip(zip);
 	}
-	
+	*/
 	public void AddBankAccount(BankAccount Account) {
 		
 		
@@ -162,19 +169,24 @@ public class CustomerAccount {
 	}
 	
 	public BankAccount getBankAccount(int id) {
-		BankAccount result = null;
-		
 		for (int n = 0; n < numBankAccounts; n++) {
-			if(BAccountList[n].getId() == id) {
-				result = BAccountList[n];
-			}
-		}
-	
-		return result; 
+	        // Check if BAccountList[n] is not null and if the id matches
+	        if (BAccountList[n] != null && BAccountList[n].getId() == id) {
+	            return BAccountList[n]; // Return immediately upon finding the match
+	        }
+	    }
+	    return null; 
 	
 	}
 	
 	
+	public BankAccount getBAbyIndex(int i) {
+		return BAccountList[i];
+	}
+	
+	public boolean getOnline() {
+		return this.isOnline;
+	}
 		
 	
 	
