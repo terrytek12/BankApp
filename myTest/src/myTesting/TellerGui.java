@@ -19,19 +19,18 @@ public class TellerGui implements TellerInterface {
 	
 	
 	
-	public void processCommands()
+	public void processCommands() 
 	 {
 		 String[] commands = {
-				 	"Enter Customer Account",
-				 	"Create CA",
-				 	"Create Bank Account",
-				 	"Deposit",
-				 	"Withdraw",
-				 	"share new BA",
-				 	"share old BA",
-				 	"delete BA",  // modified list 
-				 	"money transfer",
-				 	"Logout"};
+				    "Enter Customer Account", //0
+				 	"Create CA", // 1 
+				 	"Deposit", // 2 
+				 	"Withdraw", // 3 
+				 	"share new BA", // 4
+				 	"share old BA", // 5
+				 	"delete BA",  // 6 
+				 	"money transfer", // 7
+				 	"Logout"}; // 8
 		 
 		 int choice;
 		 
@@ -61,9 +60,24 @@ public class TellerGui implements TellerInterface {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} break;
-			 	case 2: Deposit(); break;
-			 	case 3: Withdraw(); break;
-			 	case 4: ShareNewBA(); break;   
+			 	case 2: try {
+					Deposit();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} break;
+			 	case 3: try {
+					Withdraw();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} break;
+			 	case 4: try {
+					ShareNewBA();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} break;   
 			 	case 5: ShareOldBA(); break;
 			 	case 6: DeleteBA(); break; // modified whole list for new functions and established ones 
 			 	case 7: MoneyTransfer(); break;
@@ -152,7 +166,56 @@ public class TellerGui implements TellerInterface {
 	}
 	
 	
-	private void Deposit() {
+	private void Deposit() throws ClassNotFoundException {
+		
+		try {
+		Message newMess = new Message("Hello", "Deposit");
+		client.sendMessage(newMess);
+		
+		Message returnMess = client.getMessage();
+		
+		if(returnMess.getType().equals("SendBankId")) {
+			String ID = JOptionPane.showInputDialog("Enter a bank id");
+			
+			Message newMess1 = new Message(ID, "BankID");
+			client.sendMessage(newMess1);
+			
+			Message returnMess1 = client.getMessage();
+			if(returnMess1.getType().equals("Amount")) {
+				
+				String amount = JOptionPane.showInputDialog("enter amount to deposit");
+				
+				Message newMess2 = new Message(amount, "SentAmount");
+				client.sendMessage(newMess2);
+				
+				
+				Message returnMess2 = client.getMessage();
+				
+				if(returnMess2.getType().equals("BalanceCheck")) {
+					
+					
+					JFrame frame = new JFrame("Gui");
+					frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					
+					JOptionPane.showMessageDialog(frame, returnMess2.getText());
+					
+					
+					
+				}
+				
+				
+				
+			}
+			
+			
+			
+		}
+		
+		
+		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		
 		
@@ -160,11 +223,133 @@ public class TellerGui implements TellerInterface {
 	}
 	
 	
-	private void Withdraw() {
+	private void Withdraw() throws ClassNotFoundException {
+		
+		try {
+			Message newMess = new Message("Hello", "Withdraw");
+			client.sendMessage(newMess);
+			
+			Message returnMess = client.getMessage();
+			
+			
+			if(returnMess.getType().equals("SendBankId")) {
+				
+				String ID = JOptionPane.showInputDialog("Enter a bank id");
+				
+				Message newMess1 = new Message(ID, "BankID");
+				client.sendMessage(newMess1);
+				
+				
+				
+				Message returnMess1 = client.getMessage();
+				if(returnMess1.getType().equals("Amount")) {
+					String amount = JOptionPane.showInputDialog("enter amount to withdraw");
+					
+					Message newMess2 = new Message(amount, "WithdrawAmount");
+					client.sendMessage(newMess2);
+					
+					Message returnMess2 = client.getMessage();
+					
+					if(returnMess2.getType().equals("BalanceCheck")) {
+						
+						
+						JFrame frame = new JFrame("Gui");
+						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						
+						JOptionPane.showMessageDialog(frame, returnMess2.getText());
+						
+						
+						
+					}
+					
+					
+					
+					
+				}
+				
+				
+				
+			
+				
+				
+			}
+			
+			
+			
+			
+		
+		
+		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		
 		
 	}
 	
-	private void ShareNewBA() {
+	private void ShareNewBA() throws ClassNotFoundException {
+		
+		
+		try {
+				
+				String id = JOptionPane.showInputDialog("Enter a new bank id");
+			//	String FirstN = JOptionPane.showInputDialog("Enter a FirstName");
+			//	String LastN = JOptionPane.showInputDialog("Enter a LastName");
+				String balance = JOptionPane.showInputDialog("Enter orignal balance");
+				String pin = JOptionPane.showInputDialog("Enter a pin to set");
+	
+			
+				Message newMess = new Message(id +" " + balance + " " + pin , "ShareNewBA");
+				client.sendMessage(newMess);
+			
+				Message returnMess = client.getMessage();
+				if (returnMess.getType().equals("NeedEmail")){
+					String Email = JOptionPane.showInputDialog("Enter a Email of account to share with");
+					
+					Message newMess1 = new Message(Email, "ShareEmail");
+					client.sendMessage(newMess1);
+					
+					
+					Message returnMess1 = client.getMessage();
+					
+					
+					if(returnMess1.getType().equals("Success")) {
+						
+						JFrame frame = new JFrame("Gui");
+						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						
+						JOptionPane.showMessageDialog(frame, returnMess1.getText());
+						
+						
+					}
+					
+					
+					
+					
+				}
+				
+				
+				
+			
+			
+			
+			
+			
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+		
+		
+		
 		
 	}
 	

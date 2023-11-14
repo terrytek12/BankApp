@@ -10,19 +10,21 @@ public class BankAppServer {
 	
 	public static void main(String[] args) {
 		
-		 CustomerAccount[] MasterList = new CustomerAccount[1];
+		 CustomerAccount[] MasterList = new CustomerAccount[7];
 		 HashMap<String, CustomerAccount> CustomerEmail = new HashMap<String, CustomerAccount>();
 		
 		 BankAccount TestBa = new BankAccount(1234, 100, "John", "Doe", 1);
 		 
 		 CustomerAccount TestAccount = new CustomerAccount("TestEmail@gmail.com", "John", "Doe", "pass");
+		 CustomerAccount TestAccount2 = new CustomerAccount("John@gmail.com", "John", "jeff", "pass");
 		 
 		 TestAccount.AddBankAccount(TestBa);
 		 
 		 MasterList[0] = TestAccount;
+		 MasterList[1] = TestAccount;
 		 
 		 CustomerEmail.put("TestEmail@gmail.com", TestAccount);
-		
+		 CustomerEmail.put("John@gmail.com", TestAccount2);
 		
 		 ServerSocket serverSocket = null;
 		 
@@ -77,6 +79,8 @@ public class BankAppServer {
 		private ObjectOutputStream out;
 	    private ObjectInputStream in;
 		private HashMap<String, CustomerAccount> CustomerHash;
+		private BankAccount WorkingBA2 = null;
+		private CustomerAccount WorkingAccount2 = null;
 		
 		public ClientHandler(Socket socket, CustomerAccount[] masterList, HashMap<String, CustomerAccount> EmailHash ) throws IOException {
 			this.clientSocket = socket;
@@ -116,11 +120,11 @@ public class BankAppServer {
 					out.flush();
 					
 					
-					
+					message = (Message) in.readObject();
 				}
 				
 				
-				message = (Message) in.readObject();
+				
 				
 				
 				
@@ -164,11 +168,11 @@ public class BankAppServer {
 	                 while (true) {
 	                    message = (Message) in.readObject();
 	                    System.out.println("Working");
-	                    if (message.getType().equals("Deposit")) {
+	                    if (message.getType().equals("Deposit") || message.getType().equals("Withdraw")) {
 	                        Message newMess1 = new Message("gimme bank id", "SendBankId");
 	                        out.writeObject(newMess1);
 	                        out.flush();
-	                        System.out.println("deposit");
+	                        System.out.println("deposit/withdraw");
 	                    }
 	                        
 	                    else if (message.getType().equals("BankID")) {
@@ -195,9 +199,59 @@ public class BankAppServer {
 	                        System.out.println(WorkingBA.getBalance() + " here it is");
 	                        
 	                    }
+	                    
+	                    else if (message.getType().equals("WithdrawAmount")) {
+	                    	System.out.println("withdraw amount here");
+	                    	
+	                    	
+	                    	int amount = Integer.parseInt(message.getText());
+	                    	
+	                    	if (amount < WorkingBA.getBalance()) {
+	                    		WorkingBA.withdraw(amount);
+		                    	System.out.println(WorkingBA.getBalance() + " here it is");
+		                    	
+		                    	
+		                    	Message newMess3 = new Message("Here is amount " + WorkingBA.getBalance(), "BalanceCheck");
+		                        out.writeObject(newMess3);
+		                        out.flush(); 
+		                    	
+	                    	}
+	                	
+	                    }
 	                   
+	                    else if (message.getType().equals("ShareNewBA")) {
+	                    	
+	                    	
+	                    	
+	                    	String[] parts = message.getText().split(" ");
+	                    	int id = Integer.parseInt(parts[0]);
+	                    	int balance = Integer.parseInt(parts[1]);
+	                    	int pin = Integer.parseInt(parts[2]);
+	                    	String FN = WorkingAccount.getFirstName();
+	                    	String LN = WorkingAccount.getLastName();
+	                    	
+	                    	WorkingBA2 = new BankAccount(pin, balance, FN, LN, id);
+	                    	
+	                    	Message sendMess = new Message("I need a an email to share with", "NeedEmail");;
+	                    	out.writeObject(sendMess);
+	                    	out.flush();
+	                    	
+	                    	
+	                    }
 	                        
-	                        
+	                    
+	                    else if (message.getType().equals("ShareEmail")) {
+	                    	
+	                    	WorkingAccount2 = CustomerHash.get(message.getText());
+	                    	
+	                    	WorkingAccount2.AddBankAccount(WorkingBA2);
+	                    	
+	                    	
+	                    	Message sendMess = new Message("Share new Ba is good", "Success");
+	                    	out.writeObject(sendMess);
+	                    	out.flush();
+	                    	
+	                    }
 	            
 	                        
 	                 
