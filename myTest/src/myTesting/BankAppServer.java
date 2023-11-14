@@ -99,6 +99,32 @@ public class BankAppServer {
 				
 				
 				
+				if (message.getType().equals("CreateCA")) {
+					System.out.println("We are creating a CA");
+					String[] parts = message.getText().split(" ");
+					String email = parts[0];
+					String firstN = parts[1];
+					String lastN = parts[2];
+					String pass = parts[3];
+					
+					CustomerAccount newAccount = new CustomerAccount(email, firstN, lastN, pass);
+					CustomerHash.put(email, newAccount);
+					System.out.println("account made");
+					
+					Message goBack = new Message("Account created", "Success");
+					out.writeObject(goBack);
+					out.flush();
+					
+					
+					
+				}
+				
+				
+				message = (Message) in.readObject();
+				
+				
+				
+				
 				if (message.getType().equals("loginEmail")) { 
 					
 					String GetterEmail = message.getText();
@@ -166,8 +192,10 @@ public class BankAppServer {
 	                        Message newMess3 = new Message("Here is amount " + WorkingBA.getBalance(), "BalanceCheck");
 	                        out.writeObject(newMess3);
 	                        out.flush(); 
-	                        System.out.println(WorkingBA.getBalance() + " here it is");}
+	                        System.out.println(WorkingBA.getBalance() + " here it is");
 	                        
+	                    }
+	                   
 	                        
 	                        
 	            

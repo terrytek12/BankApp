@@ -27,10 +27,14 @@ public class Client {
 	
     public void sendMessage(Message message) throws IOException {
         out.writeObject(message);
+        out.flush();
         // Additional logic to handle the response from the server
     }
 	
-	
+	public Message getMessage() throws ClassNotFoundException, IOException {
+		Message message = (Message) in.readObject();
+		return message;
+	}
 	
 	
 	
@@ -42,7 +46,7 @@ public class Client {
 		
 		
 		try {
-            new Client("localhost", 3000); // Replace with actual server address and port
+            new Client("localhost", 3005); // Replace with actual server address and port
         } catch (IOException e) {
             e.printStackTrace();
             // Handle initialization errors (e.g., server not reachable)
