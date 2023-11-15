@@ -30,7 +30,8 @@ public class TellerGui implements TellerInterface {
 				 	"share old BA", // 5
 				 	"delete BA",  // 6 
 				 	"money transfer", // 7
-				 	"Logout"}; // 8
+				 	"Create Bank Account",
+				 	"clear customer account"}; // 9
 		 
 		 int choice;
 		 
@@ -78,10 +79,26 @@ public class TellerGui implements TellerInterface {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} break;   
-			 	case 5: ShareOldBA(); break;
-			 	case 6: DeleteBA(); break; // modified whole list for new functions and established ones 
+			 	case 5: try {
+					ShareOldBA();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} break;
+			 	case 6: try {
+					DeleteBA();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} break; // modified whole list for new functions and established ones 
 			 	case 7: MoneyTransfer(); break;
-			 	case 8: logOut(); break;
+			 	case 8: try {
+					CreateBA();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} break;
+			 	case 9: logOut(); break;
 			 	default:  // do nothing
 			 }
 			 
@@ -398,14 +415,135 @@ public class TellerGui implements TellerInterface {
 		
 	}
 	
-	private void DeleteBA() {
+	private void DeleteBA() throws ClassNotFoundException  {
+		
+		
+		try {
+			String id = JOptionPane.showInputDialog("Enter a bank id to delete");
+			Message newMess = new Message(id, "DeleteBA");
+			client.sendMessage(newMess);
+			
+			
+			Message returnMess = client.getMessage();
+			
+			if (returnMess.getType().equals("SendPin")) {
+				String pin = JOptionPane.showInputDialog("Enter the pin for the BA to delete");
+				Message newMess1 = new Message("pin", "Pin");
+				client.sendMessage(newMess1);
+				
+				Message returnMess1 = client.getMessage();
+				
+				if(returnMess1.getType().equals("Success")) {
+					
+					JFrame frame = new JFrame("Gui");
+					frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					
+					JOptionPane.showMessageDialog(frame, returnMess1.getText());
+					
+					
+					
+					
+				}
+				
+				
+				
+			}
+			
+			
+			
+			
+			
+			
+		} catch(IOException e) {
+			e.printStackTrace();
+			
+			
+		}
+		
+		
+		
+		
+		
+		
+		
 		
 	}
 	private void MoneyTransfer() {
 		
 	}
+	
+	private void CreateBA() throws ClassNotFoundException {
+		
+			String id = JOptionPane.showInputDialog("Enter a new bank id");
+		//	String FirstN = JOptionPane.showInputDialog("Enter a FirstName");
+		//	String LastN = JOptionPane.showInputDialog("Enter a LastName");
+			String balance = JOptionPane.showInputDialog("Enter orignal balance");
+			String pin = JOptionPane.showInputDialog("Enter a pin to set");
+			
+			try {
+				
+					Message newMess = new Message(id + " " + balance + " " + pin, "CreateBA");
+					client.sendMessage(newMess);
+					
+					Message returnMess = client.getMessage();
+				
+					if (returnMess.getType().equals("Success")) {
+						
+						JFrame frame = new JFrame("Gui");
+						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						
+						JOptionPane.showMessageDialog(frame, returnMess.getText());
+						
+						
+						
+					}
+				
+				
+				
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-	private void logOut() {
+		
+	}
+	
+	
+	
+
+	private void logOut() throws ClassNotFoundException  {
+		
+	   try {
+		   
+		   Message sendMess = new Message("clear working customerAccount", "logout");
+		   client.sendMessage(sendMess);
+		   
+		   
+		   
+		   Message returnMess = client.getMessage();
+		   
+		   if (returnMess.getType().equals("logout")) {
+			   
+			   JFrame frame = new JFrame("Gui");
+				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				
+				JOptionPane.showMessageDialog(frame, returnMess.getText());
+			   
+			   
+		   }
+		   
+		   
+		   
+		   
+	   } catch (IOException e) {
+		   
+		   e.printStackTrace();
+		   
+		   
+	   }
+		
+		
+		
 		
 	}
 	

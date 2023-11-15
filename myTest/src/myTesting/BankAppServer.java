@@ -275,16 +275,80 @@ public class BankAppServer {
 	                    	
 	                    	
 	                    }
+	                    
+	                    else if (message.getText().equals("CreateBA")) {
+	                    	String[] parts = message.getText().split(" ");
+	                    	int id = Integer.parseInt(parts[0]);
+	                    	int balance = Integer.parseInt(parts[1]);
+	                    	int pin = Integer.parseInt(parts[2]);
+	                    	String FN = WorkingAccount.getFirstName();
+	                    	String LN = WorkingAccount.getLastName();
+	                    	
+	                    	
+	                    	WorkingBA2 = new BankAccount(pin, balance, FN, LN, id);
+	                    	
+	                    	WorkingAccount.AddBankAccount(WorkingBA2);
+	                    	
+	                    	
+	                    	Message Mess1 = new Message("new bank account created and added", "Success");
+	                    	out.writeObject(Mess1);
+	                    	out.flush();
+	                    	
+	                    	
+	                    	
+	                    	
+	                    } 
+	                    
+	                    
+	                    else if (message.getType().equals("DeleteBA")) {
+	                    	
+	                    	int id = Integer.parseInt(message.getText());
+	                    	WorkingBA = WorkingAccount.getBankAccount(id);
+	                    	
+	                    	Message sendMess = new Message("gimme pin", "SendPin");
+	                    	out.writeObject(sendMess);
+	                    	out.flush();
+	                    	
+	                    	
+	                    	message = (Message) in.readObject();
+	                    	
+	                    	if (message.getType().equals("Pin ")) {
+	                    		
+	                    		int pin = Integer.parseInt(message.getText());
+	                    		
+	                    		if(pin == WorkingBA.getPin()) {
+	                    			
+	                    			WorkingAccount.removeBankAccount(id);
+	                    			
+	                    			Message sendMess2 = new Message("Deleted BA", "Success");
+	                    			out.writeObject(sendMess2);
+	                    			out.flush();
+	                    			
+	                    			
+	                    			
+	                    		}
+	                    		
+	                    		
+	                    		
+	                    		
+	                    		
+	                    	}
+	                    	
+	                    	
+	                    	
+	                    }
 	                        
 	                 
 	                        
 	                       else if (message.getType().equals("logout")) {
-	                        Message newMess2 = new Message( "Thank you log out", "logout");
+	                    	WorkingAccount.setOnline(false);   
+	                    	
+	                    	
+	                        Message newMess2 = new Message( "Thank you enter a Customer Account to use", "logout");
 	                        out.writeObject(newMess2);
 	                        out.flush();
-	                        WorkingAccount.setOnline(false);
-	                        clientSocket.close();
-	                        break; }
+	                       // clientSocket.close();
+	                       // break; }
 	                    
 	                 		}	
 	                
