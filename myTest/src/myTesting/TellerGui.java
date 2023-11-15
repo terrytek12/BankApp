@@ -353,7 +353,48 @@ public class TellerGui implements TellerInterface {
 		
 	}
 	
-	private void ShareOldBA() {
+	private void ShareOldBA() throws ClassNotFoundException {
+		
+		
+		
+		try {
+				
+			String id = JOptionPane.showInputDialog("Enter a bank id to share");
+			String email = JOptionPane.showInputDialog("Enter email with account to share with");
+
+			
+				
+			Message newMess = new Message(id + " " + email, "ShareOldBA");
+			client.sendMessage(newMess);	
+			
+			
+			Message returnMess = client.getMessage();
+			
+			if (returnMess.getType().equals("Success")) {
+				
+				JFrame frame = new JFrame("Gui");
+				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+				
+				JOptionPane.showMessageDialog(frame, returnMess.getText());
+				
+				
+				
+			}
+				
+				
+				
+			
+			
+			
+			
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		
 		
 	}
 	

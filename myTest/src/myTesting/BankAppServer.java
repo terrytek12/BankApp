@@ -252,7 +252,29 @@ public class BankAppServer {
 	                    	out.flush();
 	                    	
 	                    }
-	            
+	                    
+	                    else if (message.getType().equals("ShareOldBA")) {
+	                    	
+	                    	String[] parts = message.getText().split(" ");
+	                    	String email = parts[0];
+	                    	int id = Integer.parseInt(parts[1]); 
+	                    	
+	                    	
+	                    	WorkingBA = WorkingAccount.getBankAccount(id);
+	                    	
+	                    	WorkingAccount2 = CustomerHash.get(email);
+	                    	
+	                    	
+	                    	WorkingAccount2.AddBankAccount(WorkingBA);
+	                    	
+	                    	
+	                    	Message newMess1 = new Message("BA added to other account", "Success");
+	                    	
+	                    	out.writeObject(newMess1);
+	                    	out.flush();
+	                    	
+	                    	
+	                    }
 	                        
 	                 
 	                        
