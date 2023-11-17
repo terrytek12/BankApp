@@ -19,10 +19,95 @@ public class TellerGui implements TellerInterface {
 	
 	
 	
-	public void processCommands() 
+	public void processCommands()  
 	 {
+		try {
+		String email = JOptionPane.showInputDialog("Provide Teller email");
+		
+		Message tellermessage = new Message(email, "TellerLogin");
+		
+		client.sendMessage(tellermessage);
+		
+		
+		try {
+			Message returnMessTeller = client.getMessage();
+			
+			
+			if (returnMessTeller.getType().equals("ReqPass")) {
+				String password = JOptionPane.showInputDialog("Provide Teller password");
+				
+				Message tellermessage2 = new Message(password, "SentPass");
+				client.sendMessage(tellermessage2);
+				
+				
+				
+				returnMessTeller = client.getMessage();
+				
+				if(returnMessTeller.getType().equals("Fail")) {
+					
+					JFrame frame = new JFrame("Gui");
+					frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					
+					JOptionPane.showMessageDialog(frame, returnMessTeller.getText());
+					
+					return;
+					
+					
+					
+					
+				} else {
+					
+					JFrame frame = new JFrame("Gui");
+					frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					
+					JOptionPane.showMessageDialog(frame, returnMessTeller.getText());
+					
+					
+					
+					
+				}
+				
+				
+				
+				
+				
+				
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+		
+		
+		
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+	
+		
+		
+		
+		
+		
+		
+		
+		
 		 String[] commands = {
-				    "Enter Customer Account", //0
+				    "Select Customer Account", //0
 				 	"Create CA", // 1 
 				 	"Deposit", // 2 
 				 	"Withdraw", // 3 
@@ -38,7 +123,7 @@ public class TellerGui implements TellerInterface {
 		 do {
 			 choice = JOptionPane.showOptionDialog(null,
 					 "Select a command", 
-					 "DVD Collection", 
+					 "Teller Bank", 
 					 JOptionPane.YES_NO_CANCEL_OPTION, 
 					 JOptionPane.QUESTION_MESSAGE, 
 					 null, 
@@ -91,14 +176,24 @@ public class TellerGui implements TellerInterface {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} break; // modified whole list for new functions and established ones 
-			 	case 7: MoneyTransfer(); break;
+			 	case 7: try {
+					MoneyTransfer();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} break;
 			 	case 8: try {
 					CreateBA();
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} break;
-			 	case 9: logOut(); break;
+			 	case 9: try {
+					logOut();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} break;
 			 	default:  // do nothing
 			 }
 			 
@@ -468,7 +563,72 @@ public class TellerGui implements TellerInterface {
 		
 		
 	}
-	private void MoneyTransfer() {
+	private void MoneyTransfer() throws ClassNotFoundException {
+		
+		
+		try {
+			
+				
+			String id = JOptionPane.showInputDialog("provide id of BA to transfer money out of");
+			Message newMess = new Message(id, "MoneyTransfer");
+			client.sendMessage(newMess);
+			
+			Message returnMess = client.getMessage();
+			
+			if (returnMess.getType().equals("SendDetails")) {
+				
+				String email = JOptionPane.showInputDialog("Provide email of Customer to send to");
+				String id2 = JOptionPane.showInputDialog("Provide BA of customer to send to");
+				
+				Message newMess2 = new Message(email + " " + id2, "SentInfo");
+				client.sendMessage(newMess2);
+				
+				Message returnMess2 = client.getMessage();
+				
+				
+				if (returnMess2.getType().equals("ProvideAmount"));
+					String amount = JOptionPane.showInputDialog("Provide amount to send");
+					
+					Message sendMess2 = new Message(amount, "SentAmountT");
+					client.sendMessage(sendMess2);
+
+					
+					Message returnMess3 = client.getMessage();
+					
+					JFrame frame = new JFrame("Gui");
+					frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					
+					JOptionPane.showMessageDialog(frame, returnMess3.getText());
+					
+					
+					
+				
+				
+				
+			}
+			
+			
+			
+			
+			
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+			
+			
+			
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 	}
 	

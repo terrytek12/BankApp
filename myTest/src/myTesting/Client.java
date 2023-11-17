@@ -1,8 +1,10 @@
 package myTesting;
-
+import java.awt.BorderLayout;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
+import javax.swing.JOptionPane;
 
 
 public class Client {
@@ -12,16 +14,21 @@ public class Client {
     private TellerGui tellerGui;
     public TellerInterface TInterface;
 
-    public Client(String serverAddress, int serverPort) throws IOException {
+    public Client(String serverAddress, int serverPort, String option) throws IOException {
         socket = new Socket(serverAddress, serverPort);
         out = new ObjectOutputStream(socket.getOutputStream());
         in = new ObjectInputStream(socket.getInputStream());
 
         // Initialize and display the GUI
-        tellerGui = new TellerGui(this);
-        TInterface = tellerGui;
-        tellerGui.processCommands();
-       
+        if (option.equals("TELLER")) {
+        	tellerGui = new TellerGui(this);
+        	TInterface = tellerGui;
+        	tellerGui.processCommands();
+        	
+        } 
+        
+        
+        
     }
 	
 	
@@ -46,7 +53,13 @@ public class Client {
 		
 		
 		try {
-            new Client("localhost", 3005); // Replace with actual server address and port
+			
+			
+			String option = JOptionPane.showInputDialog("Enter Teller for teller or Atm for atm");
+			String finalop = option.toUpperCase();
+			
+			
+            new Client("localhost", 3005, finalop); // Replace with actual server address and port
         } catch (IOException e) {
             e.printStackTrace();
             // Handle initialization errors (e.g., server not reachable)

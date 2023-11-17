@@ -12,20 +12,27 @@ public class BankAppServer {
 		
 		 CustomerAccount[] MasterList = new CustomerAccount[7];
 		 HashMap<String, CustomerAccount> CustomerEmail = new HashMap<String, CustomerAccount>();
+		 HashMap<String, TellerAccount> TellerEmail = new HashMap<String, TellerAccount>();
+		  		
+		 
 		
 		 BankAccount TestBa = new BankAccount(1234, 100, "John", "Doe", 1);
 		 
 		 CustomerAccount TestAccount = new CustomerAccount("TestEmail@gmail.com", "John", "Doe", "pass");
 		 CustomerAccount TestAccount2 = new CustomerAccount("John@gmail.com", "John", "jeff", "pass");
+		 TellerAccount TestTeller = new TellerAccount("Jeff", "Doe", "Teller@gmail.com", "pass");
 		 
 		 TestAccount.AddBankAccount(TestBa);
+		 
 		 
 		 MasterList[0] = TestAccount;
 		 MasterList[1] = TestAccount;
 		 
 		 CustomerEmail.put("TestEmail@gmail.com", TestAccount);
 		 CustomerEmail.put("John@gmail.com", TestAccount2);
-		
+		 TellerEmail.put("Teller@gmail.com", TestTeller);
+		 
+		 
 		 ServerSocket serverSocket = null;
 		 
 		 
@@ -46,7 +53,7 @@ public class BankAppServer {
 				 
 				 System.out.println("New client connected" + client.getInetAddress().getHostAddress());
 				 
-				 ClientHandler clientSock = new ClientHandler(client, MasterList, CustomerEmail);
+				 ClientHandler clientSock = new ClientHandler(client, MasterList, CustomerEmail, TellerEmail);
 				 
 				 new Thread(clientSock).start();
 				 
@@ -81,13 +88,16 @@ public class BankAppServer {
 		private HashMap<String, CustomerAccount> CustomerHash;
 		private BankAccount WorkingBA2 = null;
 		private CustomerAccount WorkingAccount2 = null;
+		private HashMap<String, TellerAccount> TellerHash;
+		private TellerAccount TellAcc = null;
 		
-		public ClientHandler(Socket socket, CustomerAccount[] masterList, HashMap<String, CustomerAccount> EmailHash ) throws IOException {
+		public ClientHandler(Socket socket, CustomerAccount[] masterList, HashMap<String, CustomerAccount> EmailHash,  HashMap<String, TellerAccount> EmailHash2) throws IOException {
 			this.clientSocket = socket;
 			this.bigList = masterList;
 			this.out = new ObjectOutputStream(clientSocket.getOutputStream());
 	        this.in = new ObjectInputStream(clientSocket.getInputStream());
 	        this.CustomerHash = EmailHash;
+	        this.TellerHash = EmailHash2;
 		}
 		
 		
@@ -100,6 +110,37 @@ public class BankAppServer {
 				
 				Message message = (Message) in.readObject();
 				
+				
+				if (message.getType().equals("TellerLogin")) {
+					
+					TellAcc = TellerHash.get(message.getText());
+					Message newMess20 = new Message("gimmepass", "ReqPass");
+					out.writeObject(newMess20);
+					out.flush();
+					
+					message = (Message) in.readObject();
+					
+					if (message.getType().equals("SentPass") && message.getText().equals(TellAcc.getPassword())) {
+						Message newMess21 = new Message("login good", "Success");
+						out.writeObject(newMess21);
+						out.flush();
+						
+						
+						
+						
+						
+					} else {
+						Message newMess21 = new Message("not authorized", "Fail");
+						out.writeObject(newMess21);
+						out.flush();
+						
+						
+					}
+					
+					
+				while (true) {	
+					
+				message = (Message) in.readObject();	
 				
 				
 				
@@ -120,7 +161,7 @@ public class BankAppServer {
 					out.flush();
 					
 					
-					message = (Message) in.readObject();
+					
 				}
 				
 				
@@ -336,26 +377,110 @@ public class BankAppServer {
 	                    	
 	                    	
 	                    	
+	                    } 
+	                    
+	                    else if (message.getType().equals("MoneyTransfer")) {
+	                    	
+	                    	int id = Integer.parseInt(message.getText());
+	                    	WorkingBA = WorkingAccount.getBankAccount(id);
+	                    	
+	                    	Message sendMess = new Message("gimme email and BA id to send to", "SendDetails");
+	                    	out.writeObject(sendMess);
+	                    	out.flush();
+	                    	
+	                    	message = (Message) in.readObject();
+	                    	
+	                    	if (message.getType().equals("SentInfo")) {
+	                    		
+	                    		String[] parts = message.getText().split(" ");
+	                    		String email = parts[0];
+	                    		Integer id2 = Integer.parseInt(parts[1]);
+	                    		
+	                    		WorkingAccount2 = CustomerHash.get(email);
+	                    		WorkingBA2 = WorkingAccount2.getBankAccount(id2);
+	                    		
+	                    		
+	                    		Message sendMess2 = new Message("gimme amount", "ProvideAmount");
+	                    		out.writeObject(sendMess2);
+	                    		out.flush();	                    		
+	                    		
+	                    		
+	                    		message = (Message) in.readObject();
+	                    		
+	                    		if (message.getType().equals("SentAmountT")) {
+	                    			
+	                    			int amount = Integer.parseInt(message.getText());
+	                    			
+	                    			if (amount < WorkingBA.getBalance()) {
+	                    				
+	                    				WorkingBA.withdraw(amount);
+	                    				WorkingBA2.withdraw(amount);
+	                    				
+	                    				Message sendMess3 = new Message("Money transfer success", "Success");
+	                    				out.writeObject(sendMess3);
+	                    				out.flush();
+	                    				
+	                    				
+	                    				
+	                    			} else {
+	                    				
+	                    				
+	                    				Message sendMess3 = new Message("balance too low for amount", "Fail");
+	                    				out.writeObject(sendMess3);
+	                    				out.flush();
+	                    				
+	                    				
+	                    				
+	                    			}
+	                    			
+	                    		
+	                    			 
+	                    			
+	                    			
+	                    		
+	                    			
+	                    			
+	                    			
+	                    			
+	                    		}
+	                    		
+	                    		else if (message.getType().equals("logout")) {
+        	                    	WorkingAccount.setOnline(false);   
+        	                    	
+        	                    	
+        	                        Message newMess2 = new Message( "Thank you enter a Customer Account to use", "logout");
+        	                        out.writeObject(newMess2);
+        	                        out.flush();
+        	                       // clientSocket.close();
+        	                       // break; }
+        	                    
+        	                 				}	
+	                    		
+	                    		
+	                    		
+	                    		
+	                    	}
+	                    	
+	                    	
+	                    	
+	                    	
+	                    	
+	                    	
+	                    	
 	                    }
 	                        
 	                 
 	                        
-	                       else if (message.getType().equals("logout")) {
-	                    	WorkingAccount.setOnline(false);   
-	                    	
-	                    	
-	                        Message newMess2 = new Message( "Thank you enter a Customer Account to use", "logout");
-	                        out.writeObject(newMess2);
-	                        out.flush();
-	                       // clientSocket.close();
-	                       // break; }
-	                    
-	                 		}	
+	                     
 	                
-						} 
+								} 
 				
 					
+							}
 				
+						}
+				
+					}
 					
 	            }
 				
