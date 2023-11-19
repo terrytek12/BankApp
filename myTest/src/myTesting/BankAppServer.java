@@ -16,7 +16,7 @@ public class BankAppServer {
 		  		
 		 
 		
-		 BankAccount TestBa = new BankAccount(1234, 100, "John", "Doe", 1);
+		 BankAccount TestBa = new BankAccount(1234, 100, "John", "Doe", 1234);
 		 
 		 CustomerAccount TestAccount = new CustomerAccount("TestEmail@gmail.com", "John", "Doe", "pass");
 		 CustomerAccount TestAccount2 = new CustomerAccount("John@gmail.com", "John", "jeff", "pass");
@@ -87,9 +87,11 @@ public class BankAppServer {
 	    private ObjectInputStream in;
 		private HashMap<String, CustomerAccount> CustomerHash;
 		private BankAccount WorkingBA2 = null;
+		private CustomerAccount WorkingAccount = null;
 		private CustomerAccount WorkingAccount2 = null;
 		private HashMap<String, TellerAccount> TellerHash;
 		private TellerAccount TellAcc = null;
+		BankAccount WorkingBA = null;
 		
 		public ClientHandler(Socket socket, CustomerAccount[] masterList, HashMap<String, CustomerAccount> EmailHash,  HashMap<String, TellerAccount> EmailHash2) throws IOException {
 			this.clientSocket = socket;
@@ -174,9 +176,9 @@ public class BankAppServer {
 					
 					String GetterEmail = message.getText();
 					
-					CustomerAccount WorkingAccount = CustomerHash.get(GetterEmail);
+					WorkingAccount = CustomerHash.get(GetterEmail);
 					
-					BankAccount WorkingBA = null;
+					
 					
 					Message newMess = new Message("gimme Pass", "RequestPass");
 	                out.writeObject(newMess); 
@@ -218,7 +220,8 @@ public class BankAppServer {
 	                        
 	                    else if (message.getType().equals("BankID")) {
 	                    	int tempid = Integer.parseInt(message.getText());	                        
-	                        WorkingBA = WorkingAccount.getBAbyIndex(0);
+	                        WorkingBA = WorkingAccount.getBankAccount(tempid);
+	                        
 	                        System.out.println(WorkingBA.getId());
 	                        Message newMess2 = new Message("how much", "Amount");
 	                        out.writeObject(newMess2);
@@ -338,7 +341,25 @@ public class BankAppServer {
 	                    	
 	                    	
 	                    	
-	                    } 
+	                    } else if (message.getType().equals("CreateCA")) {
+	    					System.out.println("We are creating a CA");
+	    					String[] parts = message.getText().split(" ");
+	    					String email = parts[0];
+	    					String firstN = parts[1];
+	    					String lastN = parts[2];
+	    					String pass = parts[3];
+	    					
+	    					CustomerAccount newAccount = new CustomerAccount(email, firstN, lastN, pass);
+	    					CustomerHash.put(email, newAccount);
+	    					System.out.println("account made");
+	    					
+	    					Message goBack = new Message("Account created", "Success");
+	    					out.writeObject(goBack);
+	    					out.flush();
+	    					
+	    					
+	    					
+	    				}
 	                    
 	                    
 	                    else if (message.getType().equals("DeleteBA")) {
@@ -442,19 +463,32 @@ public class BankAppServer {
 	                    			
 	                    			
 	                    			
-	                    		}
-	                    		
-	                    		else if (message.getType().equals("logout")) {
-        	                    	WorkingAccount.setOnline(false);   
-        	                    	
-        	                    	
-        	                        Message newMess2 = new Message( "Thank you enter a Customer Account to use", "logout");
+	                    		} else if (message.getType().equals("Clear")) {
+	                    			WorkingAccount.setOnline(false);
+	                    			WorkingAccount = null;
+	                    			WorkingBA = null;
+	                    			
+	                    			Message newMess2 = new Message( "Thank you enter a Customer Account to use", "Success");
         	                        out.writeObject(newMess2);
         	                        out.flush();
-        	                       // clientSocket.close();
-        	                       // break; }
+	                    			
+	                    			
+	                    			
+	                    		}
+	                    		
+	                    		
+	                    		
+	                    		
+	                    		else if (message.getType().equals("logout")) {
+        	                    	System.out.println("Log out good");
+        	                    	
+        	                        Message newMess2 = new Message( "Thank you log out success", "logout");
+        	                        out.writeObject(newMess2);
+        	                        out.flush();
+        	                       clientSocket.close();
+        	                       break; }
         	                    
-        	                 				}	
+        	                 				
 	                    		
 	                    		
 	                    		
@@ -476,11 +510,232 @@ public class BankAppServer {
 								} 
 				
 					
-							}
+							} else if (message.getType().equals("logout")) {
+    	                    	System.out.println("Log out good");
+    	                    	
+    	                        Message newMess2 = new Message( "Thank you log out success", "logout");
+    	                        out.writeObject(newMess2);
+    	                        out.flush();
+    	                       clientSocket.close();
+    	                       break; }
 				
 						}
 				
 					}
+				
+				
+				
+				
+				
+				
+				
+				if (message.getType().equals("CustomerLogin")) {
+					
+					WorkingAccount = CustomerHash.get(message.getText());
+					
+					Message PassMess = new Message("gimme pass", "ReqPass");
+					out.writeObject(PassMess);
+					out.flush();
+					
+					
+					message = (Message) in.readObject();
+ 					
+					
+					if (message.getType().equals("SentPass") && WorkingAccount.getPassword().equals(message.getText()) && WorkingAccount.getOnline() == false) {
+						
+						Message newMess = new Message("Logged in", "Success");
+						out.writeObject(newMess);
+						out.flush();
+						
+						WorkingAccount.setOnline(true);
+						
+						
+						
+						
+						
+					} else {
+						
+						Message newMess = new Message("not logged in password wrong or Acccount online", "Fail");
+						out.writeObject(newMess);
+						out.flush();
+						
+						clientSocket.close();
+						
+						
+						
+					}
+					
+					
+					while(true) {
+						 
+						message = (Message) in.readObject();
+						
+						
+						if (message.getType().equals("BankId")) {
+							
+							int id = Integer.parseInt(message.getText());
+							
+							WorkingBA = WorkingAccount.getBankAccount(id);
+							
+							Message sendMess = new Message("provide pin", "ProvidePin");
+							out.writeObject(sendMess);
+							out.flush();
+							
+							
+							message = (Message) in.readObject();
+							
+							
+							if (message.getType().equals("ProvidePin")) {
+								
+								int pin = Integer.parseInt(message.getText());
+								
+								
+								if(pin == WorkingBA.getPin()) {
+									
+									Message sendMess1 = new Message("Success selection", "success");
+									out.writeObject(sendMess1);
+									out.flush();
+									
+									
+									
+								} else {
+									
+									Message sendMess1 = new Message("pin wrong or som", "fail");
+									out.writeObject(sendMess1);
+									out.flush();
+									clientSocket.close();
+									
+									
+									
+									}
+								
+								
+								
+								
+								
+								
+								
+								
+							}
+								
+							
+						} else if (message.getType().equals("SentAmount")) {
+							
+							int amount = Integer.parseInt(message.getText());
+							
+							WorkingBA.deposit(amount);
+							
+							Message sendMess = new Message("Successfull deposit here is balance " + WorkingBA.getBalance(), "Success");
+							out.writeObject(sendMess);
+							out.flush();
+							
+							
+							
+							
+							
+						} else if (message.getType().equals("SentAmountWithdraw")) {
+							
+							int amount = Integer.parseInt(message.getText());
+							
+							
+							
+							if (amount > WorkingBA.getBalance()) {
+								
+								Message sendMess1 = new Message("Not enought in balance", "Fail");
+								out.writeObject(sendMess1);
+								out.flush();
+								
+								
+								
+							} else {
+								
+								
+								
+								WorkingBA.withdraw(amount);
+								
+								Message sendMess = new Message("Successfull withdraw here is balance " + WorkingBA.getBalance(), "Success");
+								out.writeObject(sendMess);
+								out.flush();
+								
+								
+								
+								
+								
+							}
+							
+							
+				
+							
+						} else if (message.getType().equals("logout")) {
+							
+							
+							WorkingAccount.setOnline(false);
+							
+							Message sendMess = new Message("log out good", "logout");
+							out.writeObject(sendMess);
+							out.flush();
+							
+							clientSocket.close();
+							
+							
+							
+							
+							
+						}
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+					}
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+				}
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 					
 	            }
 				

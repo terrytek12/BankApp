@@ -13,6 +13,8 @@ public class Client {
     private ObjectInputStream in;
     private TellerGui tellerGui;
     public TellerInterface TInterface;
+    private ATMGUI AGUI;
+    private ATM ATMINTER;
 
     public Client(String serverAddress, int serverPort, String option) throws IOException {
         socket = new Socket(serverAddress, serverPort);
@@ -25,7 +27,13 @@ public class Client {
         	TInterface = tellerGui;
         	tellerGui.processCommands();
         	
-        } 
+        } else if (option.equals("ATM")) {
+        	AGUI = new ATMGUI(this);
+        	ATMINTER = AGUI;
+        	ATMINTER.processCommands();
+        	
+        	
+        }
         
         
         

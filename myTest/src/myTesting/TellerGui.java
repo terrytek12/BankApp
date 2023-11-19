@@ -115,8 +115,9 @@ public class TellerGui implements TellerInterface {
 				 	"share old BA", // 5
 				 	"delete BA",  // 6 
 				 	"money transfer", // 7
-				 	"Create Bank Account",
-				 	"clear customer account"}; // 9
+				 	"Create Bank Account", //8
+				 	"clear accounts", //9
+				 	"logout"}; // 10
 		 
 		 int choice;
 		 
@@ -189,8 +190,14 @@ public class TellerGui implements TellerInterface {
 					e.printStackTrace();
 				} break;
 			 	case 9: try {
-					logOut();
+					Clear();
 				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} break;
+			 	case 10: try {
+			 		logout();
+			 	} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} break;
@@ -671,18 +678,18 @@ public class TellerGui implements TellerInterface {
 	
 	
 
-	private void logOut() throws ClassNotFoundException  {
+	private void Clear() throws ClassNotFoundException  {
 		
 	   try {
 		   
-		   Message sendMess = new Message("clear working customerAccount", "logout");
+		   Message sendMess = new Message("clear working customerAccount", "Clear");
 		   client.sendMessage(sendMess);
 		   
 		   
 		   
 		   Message returnMess = client.getMessage();
 		   
-		   if (returnMess.getType().equals("logout")) {
+		   if (returnMess.getType().equals("Success")) {
 			   
 			   JFrame frame = new JFrame("Gui");
 				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -701,6 +708,40 @@ public class TellerGui implements TellerInterface {
 		   
 		   
 	   }
+		
+		
+		
+		
+	}
+	
+	
+	
+	private void logout() throws ClassNotFoundException {
+		
+		try {
+			
+			Message newMess = new Message("logout", "logout");
+			client.sendMessage(newMess);
+			
+			Message returnMess = client.getMessage();
+			
+			
+			JFrame frame = new JFrame("Gui");
+			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			
+			JOptionPane.showMessageDialog(frame, returnMess.getText());
+			
+			return;
+			
+			
+			
+			
+		} catch(IOException e) {
+			
+			e.printStackTrace();
+			
+		}
+		
 		
 		
 		
