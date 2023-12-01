@@ -1,7 +1,9 @@
 package myTesting;
 import java.util.Date;
+import java.util.Random;
 
 public class BankAccount {
+	private Random rand;
 	private int id; 
 	private int pin;
 	private int balance; 
@@ -18,6 +20,7 @@ public class BankAccount {
 	
 	public BankAccount(int p, int bal, String FN, String LN, int id) {
 		// need to make id unique to each instance 
+		id = rand.nextInt(999999); // Random 6 digit number
 		this.pin = p; 
 		this.balance = bal;
 		this.created = new Date();
