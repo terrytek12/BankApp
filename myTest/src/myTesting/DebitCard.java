@@ -1,4 +1,5 @@
 package myTesting;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
@@ -6,17 +7,26 @@ public class DebitCard {
 	private String sixteenDigits; 
 	private String FistName; 
 	private String LastName; 
-	private Date openeded; 
+	private Calendar opened; 
+	private Calendar exp;
 	private String expiration; 
 	private String cvv; 
 	private int pin; 
 	
 	
+	
 	public DebitCard(String FN, String LN, int p) {
 		this.FistName = FN;
 		this.LastName = LN; 
-		this.openeded = new Date();
+		this.opened = Calendar.getInstance();
+		
+		
 		// set exp to 3 years after opened; 
+		this.exp = opened;
+		int expYr = 3 + opened.get(Calendar.YEAR);
+		this.exp.set(Calendar.YEAR, expYr);
+		this.expiration = exp.toString();
+		
 		this.sixteenDigits = generateCardNumber();
 		this.cvv = generateCvvNumber();
 		this.pin = p; 
@@ -70,13 +80,14 @@ public class DebitCard {
 	}
 
 
-	public Date getOpeneded() {
-		return openeded;
+	public String getOpened() {
+		return opened.toString();
 	}
 
 
 	public String getExpiration() {
-		return expiration;
+		//return expiration;
+		return exp.toString();
 	}
 
 
