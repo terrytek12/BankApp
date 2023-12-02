@@ -91,6 +91,19 @@ public class BankAccount {
 		addToLog(res);
 	}
 	
+	public String getLog() {
+		
+		StringBuilder logString = new StringBuilder();
+	    for (int i = 0; i < LogCount; i++) {
+	        if (i > 0) logString.append(""); // Add a space between log entries
+	        logString.append("LogEntry:").append(Log[i] + ","); // Remove any newline characters
+	    }
+		
+	    return logString.toString();
+		
+		
+	}
+	
 	public void addToLog(String action) {
 		
 		if (LogCount >= Log.length) {
