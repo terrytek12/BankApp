@@ -188,6 +188,17 @@ public class CustomerAccount {
 		return this.isOnline;
 	}
 		
+	public String toString() {
+		
+		StringBuilder bankAccountsStr = new StringBuilder();
+	    for (int i = 0; i < numBankAccounts; i++) {
+	        if (i > 0) bankAccountsStr.append(""); // Add a space between bank accounts
+	        bankAccountsStr.append(BAccountList[i].toString());
+	    }
+	    return Email + "," + FirstName + "," + LastName + "," + Password + "," + (bankAccountsStr.length() > 0 ?  bankAccountsStr.toString() : "") + "\n";
+		
+		
+	}
 	
 	
 }

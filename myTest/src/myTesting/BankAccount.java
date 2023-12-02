@@ -83,15 +83,28 @@ public class BankAccount {
 	public void deposit(double amount) {
 		this.balance += amount;
 		/// need to add action to the log 
-		String res = "deposited $" + amount + "\n";
+		String res = "deposited $" + amount + ",";
 		addToLog(res);
 	}
 	
 	public void withdraw(double amount) {
 		this.balance -= amount;
 		// need to add action to log 
-		String res = "withdrew $" + amount + "\n";
+		String res = "withdrew $" + amount + ",";
 		addToLog(res);
+	}
+	
+	public String getLog() {
+		
+		StringBuilder logString = new StringBuilder();
+	    for (int i = 0; i < LogCount; i++) {
+	        if (i > 0) logString.append(""); // Add a space between log entries
+	        logString.append("LogEntry:").append(Log[i] + ","); // Remove any newline characters
+	    }
+		
+	    return logString.toString();
+		
+		
 	}
 	
 	public void addToLog(String action) {
@@ -113,8 +126,19 @@ public class BankAccount {
 		
 		
 	}
+	// .replace("\n", ",").replace("\r", ",")
 	
-	
+	public String toString() {
+		StringBuilder logString = new StringBuilder();
+	    for (int i = 0; i < LogCount; i++) {
+	        if (i > 0) logString.append(""); // Add a space between log entries
+	        logString.append("LogEntry:").append(Log[i] + ","); // Remove any newline characters
+	    }
+	    
+	    return id + "," + pin + "," + balance + "," + FirstName + "," + LastName + "," + (logString.length() > 0 ? logString.toString() : "");
+		
+		
+	}
 	
 
 }
