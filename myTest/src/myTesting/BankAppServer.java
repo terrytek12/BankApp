@@ -13,9 +13,9 @@ public class BankAppServer {
 		 CustomerAccount[] MasterList = new CustomerAccount[7];
 		 HashMap<String, CustomerAccount> CustomerEmail = new HashMap<String, CustomerAccount>();
 		 HashMap<String, TellerAccount> TellerEmail = new HashMap<String, TellerAccount>();
-		  		
+		 TellerAccount TestTeller = new TellerAccount("Jeff", "Doe", "Teller@gmail.com", "pass");
 		 
-		
+		 /*
 		 BankAccount TestBa = new BankAccount(1234, 100, "John", "Doe", 1234);
 		 
 		 CustomerAccount TestAccount = new CustomerAccount("TestEmail@gmail.com", "John", "Doe", "pass");
@@ -23,13 +23,66 @@ public class BankAppServer {
 		 TellerAccount TestTeller = new TellerAccount("Jeff", "Doe", "Teller@gmail.com", "pass");
 		 
 		 TestAccount.AddBankAccount(TestBa);
+		 */
 		 
 		 
-		 MasterList[0] = TestAccount;
-		 MasterList[1] = TestAccount;
+		 String filename = "CustomerData.txt";
 		 
-		 CustomerEmail.put("TestEmail@gmail.com", TestAccount);
-		 CustomerEmail.put("John@gmail.com", TestAccount2);
+		 try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+	            String line;
+	            while ((line = br.readLine()) != null) {
+	                String[] parts = line.split(",");
+	                if(parts.length < 4) continue; // Skip if line doesn't have enough data for CustomerAccount
+
+	                // Parse CustomerAccount data
+	                CustomerAccount customer = new CustomerAccount(parts[0], parts[1], parts[2], parts[3]);
+
+	                // Process BankAccounts
+	                for (int i = 4; i < parts.length; ) {
+	                    // Assuming a fixed number of fields for BankAccount
+	                    int id = Integer.parseInt(parts[i++]);
+	                    int pin = Integer.parseInt(parts[i++]);
+	                    int balance = Integer.parseInt(parts[i++]);
+	                    String baFirstName = parts[i++];
+	                    String baLastName = parts[i++];
+
+	                    BankAccount bankAccount = new BankAccount(pin, balance, baFirstName, baLastName, id);
+
+	                    // Assuming the remaining parts are log entries
+	                    try {
+							while (i < parts.length && parts[i].startsWith("LogEntry:")) {
+							    bankAccount.addToLog(parts[i++]);
+							}
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+	                    customer.AddBankAccount(bankAccount);
+	                }
+
+	                // Add CustomerAccount to HashMap
+	                CustomerEmail.put(customer.getEmail(), customer);
+	            }
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+		
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 System.out.println(CustomerEmail.get("TestEmail@gmail.com").toString());
+		 
+		 
+		 
+		 MasterList[0] = CustomerEmail.get("TestEmail@gmail.com");
+		 MasterList[1] = CustomerEmail.get("John@gmail.com");
+		 
+		
 		 TellerEmail.put("Teller@gmail.com", TestTeller);
 		 
 		 
@@ -53,7 +106,7 @@ public class BankAppServer {
 				 
 				 System.out.println("New client connected" + client.getInetAddress().getHostAddress());
 				 
-				 ClientHandler clientSock = new ClientHandler(client, MasterList, CustomerEmail, TellerEmail);
+				 ClientHandler clientSock = new ClientHandler(client, MasterList, CustomerEmail, TellerEmail, filename);
 				 
 				 new Thread(clientSock).start();
 				 
@@ -92,14 +145,16 @@ public class BankAppServer {
 		private HashMap<String, TellerAccount> TellerHash;
 		private TellerAccount TellAcc = null;
 		BankAccount WorkingBA = null;
+		private String filename;
 		
-		public ClientHandler(Socket socket, CustomerAccount[] masterList, HashMap<String, CustomerAccount> EmailHash,  HashMap<String, TellerAccount> EmailHash2) throws IOException {
+		public ClientHandler(Socket socket, CustomerAccount[] masterList, HashMap<String, CustomerAccount> EmailHash,  HashMap<String, TellerAccount> EmailHash2, String Fname) throws IOException {
 			this.clientSocket = socket;
 			this.bigList = masterList;
 			this.out = new ObjectOutputStream(clientSocket.getOutputStream());
 	        this.in = new ObjectInputStream(clientSocket.getInputStream());
 	        this.CustomerHash = EmailHash;
 	        this.TellerHash = EmailHash2;
+	        this.filename = Fname;
 		}
 		
 		
@@ -756,6 +811,27 @@ public class BankAppServer {
 			finally {
 				
 				try {
+					
+					
+					try {
+						
+						File myfile = new File(filename);
+						FileWriter writer = new FileWriter(myfile);
+						
+			            for (CustomerAccount account : CustomerHash.values()) {
+			            	writer.write(account.toString());
+			                 // Assuming each account should be on a new line
+			            }
+			            
+			            writer.close();
+			        } catch (IOException e) {
+			            e.printStackTrace();
+			        }
+					
+					
+					
+					
+					
 					
 					clientSocket.close();
 					} catch (IOException e) {
