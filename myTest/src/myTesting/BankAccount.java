@@ -6,7 +6,7 @@ public class BankAccount {
 	private Random rand;
 	private int id; 
 	private int pin;
-	private int balance; 
+	private double balance; 
 	private DebitCard card;
 	private Date created; 
 	private boolean isOnline = false; 
@@ -18,7 +18,7 @@ public class BankAccount {
 	
 	
 	
-	public BankAccount(int p, int bal, String FN, String LN, int id) {
+	public BankAccount(int p, double bal, String FN, String LN, int id) {
 		// need to make id unique to each instance 
 		id = rand.nextInt(999999); // Random 6 digit number
 		this.pin = p; 
@@ -39,7 +39,7 @@ public class BankAccount {
 		return pin;
 	}
 
-	public int getBalance() {
+	public double getBalance() {
 		return balance;
 	}
 
@@ -80,14 +80,14 @@ public class BankAccount {
 		LastName = lastName;
 	}
 	
-	public void deposit(int amount) {
+	public void deposit(double amount) {
 		this.balance += amount;
 		/// need to add action to the log 
 		String res = "deposited $" + amount + "\n";
 		addToLog(res);
 	}
 	
-	public void withdraw(int amount) {
+	public void withdraw(double amount) {
 		this.balance -= amount;
 		// need to add action to log 
 		String res = "withdrew $" + amount + "\n";
