@@ -3,7 +3,7 @@ import java.util.Date;
 import java.util.Random;
 
 public class BankAccount {
-	private Random rand;
+	
 	private int id; 
 	private int pin;
 	private double balance; 
@@ -18,9 +18,9 @@ public class BankAccount {
 	
 	
 	
-	public BankAccount(int p, double bal, String FN, String LN, int id) {
+	public BankAccount(int p, double bal, String FN, String LN) {
 		// need to make id unique to each instance 
-		id = rand.nextInt(999999); // Random 6 digit number
+		this.id = new Random().nextInt(999999);	// Random 6 digit number
 		this.pin = p; 
 		this.balance = bal;
 		this.created = new Date();
@@ -29,7 +29,7 @@ public class BankAccount {
 		this.LastName = LN; 
 		Log = new String[7];
 		this.LogCount = 0;
-		this.id = id;	}
+	}
 
 	public int getId() {
 		return this.id;

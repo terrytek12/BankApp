@@ -16,7 +16,7 @@ public class BankAppServer {
 		  		
 		 
 		
-		 BankAccount TestBa = new BankAccount(1234, 100, "John", "Doe", 1234);
+		 BankAccount TestBa = new BankAccount(1234, 100, "John", "Doe");
 		 
 		 CustomerAccount TestAccount = new CustomerAccount("TestEmail@gmail.com", "John", "Doe", "pass");
 		 CustomerAccount TestAccount2 = new CustomerAccount("John@gmail.com", "John", "jeff", "pass");
@@ -274,7 +274,7 @@ public class BankAppServer {
 	                    	String FN = WorkingAccount.getFirstName();
 	                    	String LN = WorkingAccount.getLastName();
 	                    	
-	                    	WorkingBA2 = new BankAccount(pin, balance, FN, LN, id);
+	                    	WorkingBA2 = new BankAccount(pin, balance, FN, LN);
 	                    	
 	                    	Message sendMess = new Message("I need a an email to share with", "NeedEmail");;
 	                    	out.writeObject(sendMess);
@@ -329,7 +329,7 @@ public class BankAppServer {
 	                    	String LN = WorkingAccount.getLastName();
 	                    	
 	                    	
-	                    	WorkingBA2 = new BankAccount(pin, balance, FN, LN, id);
+	                    	WorkingBA2 = new BankAccount(pin, balance, FN, LN);
 	                    	
 	                    	WorkingAccount.AddBankAccount(WorkingBA2);
 	                    	
