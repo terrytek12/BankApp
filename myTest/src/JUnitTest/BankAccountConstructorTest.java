@@ -8,6 +8,7 @@ import myTesting.BankAccount;
 
 public class BankAccountConstructorTest {
 
+	//@SuppressWarnings("deprecation")
 	@Test
 	public void testBankAccountConstructor() {
 		
@@ -17,6 +18,9 @@ public class BankAccountConstructorTest {
 		System.out.println(test.getId());
 		
 		assertEquals("John", result);
+		assertEquals("Doe", test.getLastName());
+		assertEquals(0000, test.getPin());
+		assertEquals(0.0, test.getBalance(), 0);
 	}
 
 }
