@@ -123,8 +123,7 @@ public class TellerGui implements TellerInterface {
 		 
 		 do {
 			 choice = JOptionPane.showOptionDialog(null,
-					 "Select a command: , 
-					 "Teller Bank", 
+					 "Select a command: , Teller Bank", 
 					 JOptionPane.YES_NO_CANCEL_OPTION, 
 					 JOptionPane.QUESTION_MESSAGE, 
 					 null, 
