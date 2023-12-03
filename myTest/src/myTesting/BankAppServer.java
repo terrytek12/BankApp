@@ -46,7 +46,7 @@ public class BankAppServer {
 	                    String baFirstName = parts[i++];
 	                    String baLastName = parts[i++];
 
-	                    BankAccount bankAccount = new BankAccount(pin, balance, baFirstName, baLastName, id);
+	                    BankAccount bankAccount = new BankAccount(pin, balance, baFirstName, baLastName);
 
 	                    // Assuming the remaining parts are log entries
 	                    try {
@@ -324,7 +324,7 @@ public class BankAppServer {
 	                    	
 	                    	String[] parts = message.getText().split(" ");
 	                    	int id = Integer.parseInt(parts[0]);
-	                    	int balance = Integer.parseInt(parts[1]);
+	                    	double balance = Integer.parseInt(parts[1]);
 	                    	int pin = Integer.parseInt(parts[2]);
 	                    	String FN = WorkingAccount.getFirstName();
 	                    	String LN = WorkingAccount.getLastName();

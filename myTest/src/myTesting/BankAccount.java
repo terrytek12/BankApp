@@ -1,10 +1,12 @@
 package myTesting;
 import java.util.Date;
+import java.util.Random;
 
 public class BankAccount {
+	
 	private int id; 
 	private int pin;
-	private int balance; 
+	private double balance; 
 	private DebitCard card;
 	private Date created; 
 	private boolean isOnline = false; 
@@ -14,10 +16,23 @@ public class BankAccount {
 	private String[] Log;
 	private int LogCount;
 	
-	
-	
-	public BankAccount(int p, int bal, String FN, String LN, int id) {
+	public BankAccount(int p, double bal, String FN, String LN, int id) {
 		// need to make id unique to each instance 
+	//	this.id = new Random().nextInt(999999);	// Random 6 digit number
+		this.pin = p; 
+		this.balance = bal;
+		this.created = new Date();
+		this.FirstName = FN; 
+		this.card = new DebitCard(FN, LN, p);
+		this.LastName = LN; 
+		this.id = id;
+		Log = new String[7];
+		this.LogCount = 0;
+	}	
+	
+	public BankAccount(int p, double bal, String FN, String LN) {
+		// need to make id unique to each instance 
+		this.id = new Random().nextInt(999999);	// Random 6 digit number
 		this.pin = p; 
 		this.balance = bal;
 		this.created = new Date();
@@ -26,7 +41,7 @@ public class BankAccount {
 		this.LastName = LN; 
 		Log = new String[7];
 		this.LogCount = 0;
-		this.id = id;	}
+	}
 
 	public int getId() {
 		return this.id;
@@ -36,7 +51,7 @@ public class BankAccount {
 		return pin;
 	}
 
-	public int getBalance() {
+	public double getBalance() {
 		return balance;
 	}
 
@@ -77,14 +92,14 @@ public class BankAccount {
 		LastName = lastName;
 	}
 	
-	public void deposit(int amount) {
+	public void deposit(double amount) {
 		this.balance += amount;
 		/// need to add action to the log 
 		String res = "deposited $" + amount + ",";
 		addToLog(res);
 	}
 	
-	public void withdraw(int amount) {
+	public void withdraw(double amount) {
 		this.balance -= amount;
 		// need to add action to log 
 		String res = "withdrew $" + amount + ",";

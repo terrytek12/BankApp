@@ -7,7 +7,7 @@ public class CustomerAccount {
 	private String Password; 
 	private boolean isOnline = false; 
 	private BankAccount BAccountList[];
-	//public	Address address; 
+	private	Address address; 
 	private int numBankAccounts; 
 	
 	
@@ -20,7 +20,7 @@ public class CustomerAccount {
 		this.LastName = LN; 
 		this.Password = Pass;
 		this.numBankAccounts = 0;
-		//this.address = new Address();
+		this.address = new Address();
 		BAccountList = new BankAccount[7];
 		
 	} 
@@ -45,7 +45,7 @@ public class CustomerAccount {
 		return Password;
 	}
 	
-	/*
+	
 	
 	public String getStreetAddress() {
 		return this.address.getStreetAddress();
@@ -75,7 +75,7 @@ public class CustomerAccount {
 		return this.address.getZip();
 	}
 	
-	*/
+	
 	
 	
 	public boolean isOnline() {
@@ -94,7 +94,7 @@ public class CustomerAccount {
 		this.isOnline = isOnline;
 	}
 	
-	/*
+	
 
 	public void setStreetNumber(int nmbr) {
 		this.address.setStreetNumber(nmbr);
@@ -123,7 +123,7 @@ public class CustomerAccount {
 	public void setZip(int zip) {
 		this.address.setZip(zip);
 	}
-	*/
+	
 	public void AddBankAccount(BankAccount Account) {
 		
 		

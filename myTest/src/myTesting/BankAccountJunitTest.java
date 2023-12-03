@@ -6,18 +6,13 @@ import org.junit.jupiter.api.Test;
 
 class BankAccountJunitTest {
 
-	@Test
-	void test() {
-		fail("Not yet implemented");
-	}
-
 	
 	@Test
 	void ConstructorTest() {
 		
-		BankAccount TestBA = new BankAccount(1234, 100, "John", "Doe", 001);
+		BankAccount TestBA = new BankAccount(1234, 100, "John", "Doe");
 		
-		assertTrue(TestBA.getPin() == 1234 && TestBA.getBalance() == 100 && TestBA.getFirstName().equals("John") && TestBA.getLastName().equals("Doe") && TestBA.getId() == 001);
+		assertTrue(TestBA.getPin() == 1234 && TestBA.getBalance() == 100 && TestBA.getFirstName().equals("John") && TestBA.getLastName().equals("Doe") && TestBA.getId() >= 1);
 		
 		
 		
@@ -27,7 +22,7 @@ class BankAccountJunitTest {
 	@Test
 	void DepositTestandLogTest() {
 		
-		BankAccount TestBA = new BankAccount(1234, 100, "John", "Doe", 001);
+		BankAccount TestBA = new BankAccount(1234, 100, "John", "Doe");
 		
 		TestBA.deposit(100);
 		
@@ -42,7 +37,7 @@ class BankAccountJunitTest {
 	@Test
 	void WithdrawTestandLogTest() {
 		
-		BankAccount TestBA = new BankAccount(1234, 100, "John", "Doe", 001);
+		BankAccount TestBA = new BankAccount(1234, 100, "John", "Doe");
 		
 		TestBA.withdraw(100);
 		
@@ -55,7 +50,7 @@ class BankAccountJunitTest {
 	
 	@Test 
 	void setPinTest(){
-		BankAccount TestBA = new BankAccount(1234, 100, "John", "Doe", 001);
+		BankAccount TestBA = new BankAccount(1234, 100, "John", "Doe");
 		
 		TestBA.setPin(4321);
 		
