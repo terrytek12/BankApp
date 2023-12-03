@@ -42,11 +42,11 @@ public class BankAppServer {
 	                    // Assuming a fixed number of fields for BankAccount
 	                    int id = Integer.parseInt(parts[i++]);
 	                    int pin = Integer.parseInt(parts[i++]);
-	                    int balance = Integer.parseInt(parts[i++]);
+	                    double balance = Double.parseDouble(parts[i++]);
 	                    String baFirstName = parts[i++];
 	                    String baLastName = parts[i++];
 
-	                    BankAccount bankAccount = new BankAccount(pin, balance, baFirstName, baLastName);
+	                    BankAccount bankAccount = new BankAccount(pin, balance, baFirstName, baLastName, id);
 
 	                    // Assuming the remaining parts are log entries
 	                    try {
@@ -375,7 +375,8 @@ public class BankAppServer {
 	                    	
 	                    }
 	                    
-	                    else if (message.getText().equals("CreateBA")) {
+	                    else if (message.getType().equals("CreateBA")) {
+	                    	System.out.println("WE are making a BA");
 	                    	String[] parts = message.getText().split(" ");
 	                    	int id = Integer.parseInt(parts[0]);
 	                    	int balance = Integer.parseInt(parts[1]);
@@ -512,9 +513,9 @@ public class BankAppServer {
 	                    		
 	                    			 
 	                    			
-	                    			
+	                    		}	
 	                    		
-	                    			
+	                    	}	
 	                    			
 	                    			
 	                    			
@@ -529,12 +530,7 @@ public class BankAppServer {
 	                    			
 	                    			
 	                    			
-	                    		}
-	                    		
-	                    		
-	                    		
-	                    		
-	                    		else if (message.getType().equals("logout")) {
+	                    		} else if (message.getType().equals("logout")) {
         	                    	System.out.println("Log out good");
         	                    	
         	                        Message newMess2 = new Message( "Thank you log out success", "logout");
@@ -548,7 +544,6 @@ public class BankAppServer {
 	                    		
 	                    		
 	                    		
-	                    	}
 	                    	
 	                    	
 	                    	
@@ -556,7 +551,8 @@ public class BankAppServer {
 	                    	
 	                    	
 	                    	
-	                    }
+	                    	
+	                    
 	                        
 	                 
 	                        
@@ -567,7 +563,8 @@ public class BankAppServer {
 					
 							} else if (message.getType().equals("logout")) {
     	                    	System.out.println("Log out good");
-    	                    	
+    	        
+
     	                        Message newMess2 = new Message( "Thank you log out success", "logout");
     	                        out.writeObject(newMess2);
     	                        out.flush();
