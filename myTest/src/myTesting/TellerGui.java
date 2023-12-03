@@ -22,7 +22,7 @@ public class TellerGui implements TellerInterface {
 	public void processCommands()  
 	 {
 		try {
-		String email = JOptionPane.showInputDialog("Provide Teller email");
+		String email = JOptionPane.showInputDialog("Provide Teller email: ");
 		
 		Message tellermessage = new Message(email, "TellerLogin");
 		
@@ -34,7 +34,7 @@ public class TellerGui implements TellerInterface {
 			
 			
 			if (returnMessTeller.getType().equals("ReqPass")) {
-				String password = JOptionPane.showInputDialog("Provide Teller password");
+				String password = JOptionPane.showInputDialog("Provide Teller password: ");
 				
 				Message tellermessage2 = new Message(password, "SentPass");
 				client.sendMessage(tellermessage2);
@@ -123,7 +123,7 @@ public class TellerGui implements TellerInterface {
 		 
 		 do {
 			 choice = JOptionPane.showOptionDialog(null,
-					 "Select a command", 
+					 "Select a command: , 
 					 "Teller Bank", 
 					 JOptionPane.YES_NO_CANCEL_OPTION, 
 					 JOptionPane.QUESTION_MESSAGE, 
@@ -211,7 +211,7 @@ public class TellerGui implements TellerInterface {
 	
 	private void SetCustomerAccount() throws ClassNotFoundException {
 		
-		String Email = JOptionPane.showInputDialog("Enter a email to work with");
+		String Email = JOptionPane.showInputDialog("Enter a email to work with: ");
 		
 		try {
 		
@@ -223,7 +223,7 @@ public class TellerGui implements TellerInterface {
 		Message returnMess = client.getMessage();
 		
 		if(returnMess.getType().equals("RequestPass")) {
-			String Password = JOptionPane.showInputDialog("Enter the password");
+			String Password = JOptionPane.showInputDialog("Enter the password: ");
 			
 			Message newMess1 = new Message(Password, "Password");
 			client.sendMessage(newMess1);
@@ -234,7 +234,7 @@ public class TellerGui implements TellerInterface {
 				JFrame frame = new JFrame("Gui");
 				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				
-				JOptionPane.showMessageDialog(frame, "Succes account selected");
+				JOptionPane.showMessageDialog(frame, "Success account selected");
 				
 			}
 			
@@ -254,10 +254,10 @@ public class TellerGui implements TellerInterface {
 	private void createCA() throws ClassNotFoundException, IOException {
 		
 		
-		String Email = JOptionPane.showInputDialog("Enter a new email to use");
-		String FirstN = JOptionPane.showInputDialog("Enter a FirstName");
-		String LastN = JOptionPane.showInputDialog("Enter a LastName");
-		String Pass = JOptionPane.showInputDialog("Enter a Pass");
+		String Email = JOptionPane.showInputDialog("Enter a new email to use: ");
+		String FirstN = JOptionPane.showInputDialog("Enter a FirstName: ");
+		String LastN = JOptionPane.showInputDialog("Enter a LastName: ");
+		String Pass = JOptionPane.showInputDialog("Enter a Password: ");
 		
 		
 		try {
@@ -272,7 +272,7 @@ public class TellerGui implements TellerInterface {
 				JFrame frame = new JFrame("Gui");
 				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 				
-				JOptionPane.showMessageDialog(frame, "Succes account created");
+				JOptionPane.showMessageDialog(frame, "Success account created");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -294,7 +294,7 @@ public class TellerGui implements TellerInterface {
 		Message returnMess = client.getMessage();
 		
 		if(returnMess.getType().equals("SendBankId")) {
-			String ID = JOptionPane.showInputDialog("Enter a bank id");
+			String ID = JOptionPane.showInputDialog("Enter a bank id: ");
 			
 			Message newMess1 = new Message(ID, "BankID");
 			client.sendMessage(newMess1);
@@ -302,7 +302,7 @@ public class TellerGui implements TellerInterface {
 			Message returnMess1 = client.getMessage();
 			if(returnMess1.getType().equals("Amount")) {
 				
-				String amount = JOptionPane.showInputDialog("enter amount to deposit");
+				String amount = JOptionPane.showInputDialog("enter amount to deposit: ");
 				
 				Message newMess2 = new Message(amount, "SentAmount");
 				client.sendMessage(newMess2);
@@ -353,7 +353,7 @@ public class TellerGui implements TellerInterface {
 			
 			if(returnMess.getType().equals("SendBankId")) {
 				
-				String ID = JOptionPane.showInputDialog("Enter a bank id");
+				String ID = JOptionPane.showInputDialog("Enter a bank id: ");
 				
 				Message newMess1 = new Message(ID, "BankID");
 				client.sendMessage(newMess1);
@@ -362,7 +362,7 @@ public class TellerGui implements TellerInterface {
 				
 				Message returnMess1 = client.getMessage();
 				if(returnMess1.getType().equals("Amount")) {
-					String amount = JOptionPane.showInputDialog("enter amount to withdraw");
+					String amount = JOptionPane.showInputDialog("Enter amount to withdraw: ");
 					
 					Message newMess2 = new Message(amount, "WithdrawAmount");
 					client.sendMessage(newMess2);
@@ -414,11 +414,11 @@ public class TellerGui implements TellerInterface {
 		
 		try {
 				
-				String id = JOptionPane.showInputDialog("Enter a new bank id");
+				String id = JOptionPane.showInputDialog("Enter a new bank id: ");
 			//	String FirstN = JOptionPane.showInputDialog("Enter a FirstName");
 			//	String LastN = JOptionPane.showInputDialog("Enter a LastName");
-				String balance = JOptionPane.showInputDialog("Enter orignal balance");
-				String pin = JOptionPane.showInputDialog("Enter a pin to set");
+				String balance = JOptionPane.showInputDialog("Enter orignal balance: ");
+				String pin = JOptionPane.showInputDialog("Enter a pin to set: ");
 	
 			
 				Message newMess = new Message(id +" " + balance + " " + pin , "ShareNewBA");
@@ -426,7 +426,7 @@ public class TellerGui implements TellerInterface {
 			
 				Message returnMess = client.getMessage();
 				if (returnMess.getType().equals("NeedEmail")){
-					String Email = JOptionPane.showInputDialog("Enter a Email of account to share with");
+					String Email = JOptionPane.showInputDialog("Enter an email of the account to share with: ");
 					
 					Message newMess1 = new Message(Email, "ShareEmail");
 					client.sendMessage(newMess1);
@@ -479,7 +479,7 @@ public class TellerGui implements TellerInterface {
 		try {
 				
 			String id = JOptionPane.showInputDialog("Enter a bank id to share");
-			String email = JOptionPane.showInputDialog("Enter email with account to share with");
+			String email = JOptionPane.showInputDialog("Enter email with the account to share with");
 
 			
 				
@@ -521,7 +521,7 @@ public class TellerGui implements TellerInterface {
 		
 		
 		try {
-			String id = JOptionPane.showInputDialog("Enter a bank id to delete");
+			String id = JOptionPane.showInputDialog("Enter a bank id to delete: ");
 			Message newMess = new Message(id, "DeleteBA");
 			client.sendMessage(newMess);
 			
@@ -529,7 +529,7 @@ public class TellerGui implements TellerInterface {
 			Message returnMess = client.getMessage();
 			
 			if (returnMess.getType().equals("SendPin")) {
-				String pin = JOptionPane.showInputDialog("Enter the pin for the BA to delete");
+				String pin = JOptionPane.showInputDialog("Enter the pin for the BA to delete: ");
 				Message newMess1 = new Message("pin", "Pin");
 				client.sendMessage(newMess1);
 				
@@ -576,7 +576,7 @@ public class TellerGui implements TellerInterface {
 		try {
 			
 				
-			String id = JOptionPane.showInputDialog("provide id of BA to transfer money out of");
+			String id = JOptionPane.showInputDialog("provide id of BA to transfer money out of: ");
 			Message newMess = new Message(id, "MoneyTransfer");
 			client.sendMessage(newMess);
 			
@@ -584,8 +584,8 @@ public class TellerGui implements TellerInterface {
 			
 			if (returnMess.getType().equals("SendDetails")) {
 				
-				String email = JOptionPane.showInputDialog("Provide email of Customer to send to");
-				String id2 = JOptionPane.showInputDialog("Provide BA of customer to send to");
+				String email = JOptionPane.showInputDialog("Provide email of Customer to send to: ");
+				String id2 = JOptionPane.showInputDialog("Provide BA of customer to send to: ");
 				
 				Message newMess2 = new Message(email + " " + id2, "SentInfo");
 				client.sendMessage(newMess2);
@@ -594,7 +594,7 @@ public class TellerGui implements TellerInterface {
 				
 				
 				if (returnMess2.getType().equals("ProvideAmount"));
-					String amount = JOptionPane.showInputDialog("Provide amount to send");
+					String amount = JOptionPane.showInputDialog("Provide amount to send: ");
 					
 					Message sendMess2 = new Message(amount, "SentAmountT");
 					client.sendMessage(sendMess2);
@@ -641,11 +641,11 @@ public class TellerGui implements TellerInterface {
 	
 	private void CreateBA() throws ClassNotFoundException {
 		
-			String id = JOptionPane.showInputDialog("Enter a new bank id");
+			String id = JOptionPane.showInputDialog("Enter a new bank id:");
 		//	String FirstN = JOptionPane.showInputDialog("Enter a FirstName");
 		//	String LastN = JOptionPane.showInputDialog("Enter a LastName");
-			String balance = JOptionPane.showInputDialog("Enter orignal balance");
-			String pin = JOptionPane.showInputDialog("Enter a pin to set");
+			String balance = JOptionPane.showInputDialog("Enter orignal balance:");
+			String pin = JOptionPane.showInputDialog("Enter a pin to set:");
 			
 			try {
 				

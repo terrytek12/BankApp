@@ -81,7 +81,7 @@ public class ATMGUI implements ATM {
 				
 				
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			
@@ -165,7 +165,7 @@ public class ATMGUI implements ATM {
 	
 	private void SelectBankAccount() throws ClassNotFoundException {
 		
-		String id = JOptionPane.showInputDialog("provide id of bank account to depositi");
+		String id = JOptionPane.showInputDialog("provide id of bank account to deposit: ");
 		
 		try {
 			
@@ -177,7 +177,7 @@ public class ATMGUI implements ATM {
 			if (returnMess.getType().equals("ProvidePin")) {
 				
 				
-				String pin = JOptionPane.showInputDialog("provide pin of bank account");
+				String pin = JOptionPane.showInputDialog("Provide pin of bank account: ");
 				
 				Message newMess2 = new Message(pin, "ProvidePin");
 				client.sendMessage(newMess2);
@@ -229,7 +229,7 @@ public class ATMGUI implements ATM {
 			
 			SelectBankAccount();
 			
-			String Amount = JOptionPane.showInputDialog("Provide amount to deposit");
+			String Amount = JOptionPane.showInputDialog("Provide amount to deposit: ");
 			Message sendMess = new Message(Amount, "SentAmount");
 			client.sendMessage(sendMess);
 			
@@ -270,7 +270,7 @@ public class ATMGUI implements ATM {
 			
 			SelectBankAccount();
 			
-			String Amount = JOptionPane.showInputDialog("Provide amount to withdraw");
+			String Amount = JOptionPane.showInputDialog("Provide amount to withdraw: ");
 			Message sendMess = new Message(Amount, "SentAmountWithdraw");
 			client.sendMessage(sendMess);
 			
