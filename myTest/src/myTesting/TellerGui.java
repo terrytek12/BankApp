@@ -122,13 +122,7 @@ public class TellerGui implements TellerInterface {
 		 int choice;
 		 
 		 do {
-			 choice = JOptionPane.showOptionDialog(null,
-					 "Select a command: , Teller Bank", 
-					 JOptionPane.YES_NO_CANCEL_OPTION, 
-					 JOptionPane.QUESTION_MESSAGE, 
-					 null, 
-					 commands,
-					 commands[commands.length - 1]);
+			 choice = JOptionPane.showOptionDialog(null,"Select a command: , Teller Bank", null, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, commands, commands[commands.length - 1]);
 		 
 			 switch (choice) {
 			 	case 0: try {
