@@ -146,7 +146,9 @@ public class CustomerAccount {
 		
 	}
 	
-	
+	public int numBankAccounts() {
+		return this.numBankAccounts;
+	}
 	
 	public void removeBankAccount(int id) {
 		
@@ -166,6 +168,15 @@ public class CustomerAccount {
 		
 		
 		
+	}
+	
+	public BankAccount listBankAccounts() {
+		for (int n = 0; n < numBankAccounts; n++) {
+			if (BAccountList[n] != null) {
+				return BAccountList[n];
+			}
+		}
+		return null;
 	}
 	
 	public BankAccount getBankAccount(int id) {
