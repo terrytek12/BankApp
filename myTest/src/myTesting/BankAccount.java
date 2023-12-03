@@ -16,7 +16,19 @@ public class BankAccount {
 	private String[] Log;
 	private int LogCount;
 	
-	
+	public BankAccount(int p, double bal, String FN, String LN, int id) {
+		// need to make id unique to each instance 
+	//	this.id = new Random().nextInt(999999);	// Random 6 digit number
+		this.pin = p; 
+		this.balance = bal;
+		this.created = new Date();
+		this.FirstName = FN; 
+		this.card = new DebitCard(FN, LN, p);
+		this.LastName = LN; 
+		this.id = id;
+		Log = new String[7];
+		this.LogCount = 0;
+	}	
 	
 	public BankAccount(int p, double bal, String FN, String LN) {
 		// need to make id unique to each instance 
