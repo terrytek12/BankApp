@@ -42,7 +42,7 @@ public class BankAppServer {
 	                    // Assuming a fixed number of fields for BankAccount
 	                    int id = Integer.parseInt(parts[i++]);
 	                    int pin = Integer.parseInt(parts[i++]);
-	                    int balance = Integer.parseInt(parts[i++]);
+	                    double balance = Double.parseDouble(parts[i++]);
 	                    String baFirstName = parts[i++];
 	                    String baLastName = parts[i++];
 
