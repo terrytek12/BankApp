@@ -1,349 +1,150 @@
 package myTesting;
 
-import java.awt.BorderLayout;
+import javax.swing.*;
 import java.io.IOException;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 public class ATMGUI implements ATM {
-	
-	private Client client;
-	
-	public ATMGUI(Client c) {
-		this.client = c;
-	}
-	
-	public void processCommands() {
-		
-		
-		
-		
-		try {
-			String email = JOptionPane.showInputDialog("Provide Customer email");
-			
-			Message tellermessage = new Message(email, "CustomerLogin");
-			
-			client.sendMessage(tellermessage);
-			
-			
-			try {
-				Message returnMessTeller = client.getMessage();
-				
-				
-				if (returnMessTeller.getType().equals("ReqPass")) {
-					String password = JOptionPane.showInputDialog("Provide Customer password");
-					
-					Message tellermessage2 = new Message(password, "SentPass");
-					client.sendMessage(tellermessage2);
-					
-					
-					
-					returnMessTeller = client.getMessage();
-					
-					if(returnMessTeller.getType().equals("Fail")) {
-						
-						JFrame frame = new JFrame("Gui");
-						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-						
-						JOptionPane.showMessageDialog(frame, returnMessTeller.getText());
-						
-						return;
-						
-						
-						
-						
-					} else {
-						
-						JFrame frame = new JFrame("Gui");
-						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-						
-						JOptionPane.showMessageDialog(frame, returnMessTeller.getText());
-						
-						
-						
-						
-					}
-					
-					
-					
-					
-					
-					
-				}
-				
-				
-				
-				
-				
-				
-				
-				
-				
-			} catch (ClassNotFoundException e) {
-				
-				e.printStackTrace();
-			}
-			
-			
-			
-			
-			
-			
-			
-			} catch(IOException e) {
-				e.printStackTrace();
-			}
-			
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		 String[] commands = {
-				 	"Deposit", // 0 
-				 	"Withdraw", // 1  
-				 	"logout"}; // 2
-		 
-		 int choice;
-		 
-		 do {
-			 choice = JOptionPane.showOptionDialog(null,
-					 "Select a command", 
-					 "Teller Bank", 
-					 JOptionPane.YES_NO_CANCEL_OPTION, 
-					 JOptionPane.QUESTION_MESSAGE, 
-					 null, 
-					 commands,
-					 commands[commands.length - 1]);
-		 
-			 switch (choice) {
-			 	case 0: try {
-					Deposit();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			 			break;
-			 	case 1: try {
-					Withdraw();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			 			break;
-			 	case 2: try {
-					logout();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} break;
-			 	default:  // do nothing
-			 }
-			 
-		 } while (choice != commands.length-1);
-		 return;
-		
-		
-		
-		
-	}
-	
-	
-	private void SelectBankAccount() throws ClassNotFoundException {
-		
-		String id = JOptionPane.showInputDialog("provide id of bank account to deposit: ");
-		
-		try {
-			
-			Message newMess = new Message(id, "BankId");
-			client.sendMessage(newMess);
 
-			
-			Message returnMess = client.getMessage();
-			if (returnMess.getType().equals("ProvidePin")) {
-				
-				
-				String pin = JOptionPane.showInputDialog("Provide pin of bank account: ");
-				
-				Message newMess2 = new Message(pin, "ProvidePin");
-				client.sendMessage(newMess2);
+    private Client client;
 
-				
-				Message returnMess2 = client.getMessage();
-				
-				JFrame frame = new JFrame("Gui");
-				frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-				
-				JOptionPane.showMessageDialog(frame, returnMess2.getText());
-				
-				
-				
-				
-				
-				
-				
-				
-			}
-			
-			
-			
-			
-			
-			
-			
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-		
-		
-		
-		
-		
-		
-		
-		
-	}
-	
-	
-	
-	
-	private void Deposit() throws ClassNotFoundException {
-		
-		
-		
-		try {
-			
-			SelectBankAccount();
-			
-			String Amount = JOptionPane.showInputDialog("Provide amount to deposit: ");
-			Message sendMess = new Message(Amount, "SentAmount");
-			client.sendMessage(sendMess);
-			
-			Message sentMess = client.getMessage();
-			
-			
-			JFrame frame = new JFrame("Gui");
-			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			
-			JOptionPane.showMessageDialog(frame, sentMess.getText());
-			
-			
-			
-		
-			
-			
-		} catch(IOException e) {
-			
-			e.printStackTrace();
-			
-			
-			
-			
-		}
-		
-		
-		
-		
-		
-		
-	}
-	
-	private void Withdraw() throws ClassNotFoundException {
-		
-		
+    // Constructor to initialize the ATM GUI with a client
+    public ATMGUI(Client c) {
+        this.client = c;
+    }
 
-		try {
-			
-			SelectBankAccount();
-			
-			String Amount = JOptionPane.showInputDialog("Provide amount to withdraw: ");
-			Message sendMess = new Message(Amount, "SentAmountWithdraw");
-			client.sendMessage(sendMess);
-			
-			Message sentMess = client.getMessage();
-			
-			
-			JFrame frame = new JFrame("Gui");
-			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			
-			JOptionPane.showMessageDialog(frame, sentMess.getText());
-			
-			
-			
-		
-			
-			
-		} catch(IOException e) {
-			
-			e.printStackTrace();
-			
-			
-			
-			
-		}
-		
-		
-		
-		
-		
-		
-		
-		
-	}
-	
-	private void logout() throws ClassNotFoundException {
-		
-		
-		try {
-			
-			Message newMess = new Message("out", "logout");
-			client.sendMessage(newMess);
-			
-			
-			Message returnMess = client.getMessage();
-			
-			
-			JFrame frame = new JFrame("Gui");
-			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			
-			JOptionPane.showMessageDialog(frame, returnMess.getText());
-			
-	
-			
-			
-			
-			
-			
-		} catch(IOException e) {
-			
-			e.printStackTrace();
-			
-			
-			
-		}
-		
-		
-		
-		
-		
-	}
-	
-	
-	
-	
-	
+    // Main method to process user commands after authentication
+    public void processCommands() {
+        authenticateUser();
+        executeUserCommands();
+    }
+
+    // Method to authenticate the user
+    private void authenticateUser() {
+        try {
+            // Prompting user to enter email and sending it to the server
+            String email = JOptionPane.showInputDialog("Provide Customer email");
+            client.sendMessage(new Message(email, "CustomerLogin"));
+            handlePasswordRequest();
+        } catch (IOException e) {
+            // Displaying an error dialog in case of an IOException
+            showErrorDialog(e.getMessage());
+        }
+    }
+
+    // Method to handle password request from the server
+    private void handlePasswordRequest() throws IOException {
+        try {
+            Message returnMessTeller = client.getMessage();
+            if (isPasswordRequest(returnMessTeller)) {
+                // Prompting user to enter password and sending it to the server
+                String password = JOptionPane.showInputDialog("Provide Customer password");
+                client.sendMessage(new Message(password, "SentPass"));
+                handleLoginResponse();
+            }
+        } catch (ClassNotFoundException e) {
+            // Displaying an error dialog in case of a ClassNotFoundException
+            showErrorDialog(e.getMessage());
+        }
+    }
+
+    // Method to handle login response from the server
+    private void handleLoginResponse() throws IOException, ClassNotFoundException {
+        Message returnMessTeller = client.getMessage();
+        // Displaying the message from the server
+        JOptionPane.showMessageDialog(new JFrame(), returnMessTeller.getText());
+    }
+
+    // Method to execute user commands after successful authentication
+    private void executeUserCommands() {
+        String[] commands = {"Deposit", "Withdraw", "Logout"};
+        int choice;
+        do {
+            // Displaying command options to the user and handling user's choice
+            choice = showCommandDialog(commands);
+            switch (choice) {
+                case 0: performDeposit(); break;
+                case 1: performWithdraw(); break;
+                case 2: logout(); break;
+                default: // Do nothing if an invalid choice is made
+            }
+        } while (choice != commands.length - 1); // Loop until 'Logout' is chosen
+    }
+
+    // Method to handle deposit functionality
+    private void performDeposit() {
+        try {
+            // Asking user for bank ID and amount, and sending the details to the server
+            String bankId = JOptionPane.showInputDialog("Enter bank account ID for deposit:");
+            String amount = JOptionPane.showInputDialog("Enter amount to deposit:");
+            client.sendMessage(new Message(bankId + " " + amount, "DepositRequest"));
+
+            // Receiving and showing server's response to the user
+            Message response = client.getMessage();
+            JOptionPane.showMessageDialog(new JFrame(), response.getText());
+        } catch (IOException | ClassNotFoundException e) {
+            // Displaying an error dialog in case of an exception
+            showErrorDialog("Error during deposit: " + e.getMessage());
+        }
+    }
+
+    // Method to handle withdrawal functionality
+    private void performWithdraw() {
+        try {
+            // Asking user for bank ID and amount, and sending the details to the server
+            String bankId = JOptionPane.showInputDialog("Enter bank account ID for withdrawal:");
+            String amount = JOptionPane.showInputDialog("Enter amount to withdraw:");
+            client.sendMessage(new Message(bankId + " " + amount, "WithdrawRequest"));
+
+            // Receiving and showing server's response to the user
+            Message response = client.getMessage();
+            JOptionPane.showMessageDialog(new JFrame(), response.getText());
+        } catch (IOException | ClassNotFoundException e) {
+            // Displaying an error dialog in case of an exception
+            showErrorDialog("Error during withdrawal: " + e.getMessage());
+        }
+    }
+
+    // Method to handle logout functionality
+    private void logout() {
+        try {
+            // Sending logout message to the server
+            client.sendMessage(new Message("", "LogoutRequest"));
+
+            // Receiving and showing server's response to the user
+            Message response = client.getMessage();
+            JOptionPane.showMessageDialog(new JFrame(), response.getText());
+
+            // Optionally, close the application or return to the login screen
+        } catch (IOException | ClassNotFoundException e) {
+            // Displaying an error dialog in case of an exception
+            showErrorDialog("Error during logout: " + e.getMessage());
+        }
+    }
+
+    // Helper method to check if the server has requested a password
+    private boolean isPasswordRequest(Message message) {
+        return "ReqPass".equals(message.getType());
+    }
+
+    // Helper method to check if the login attempt failed
+    private boolean isLoginFailed(Message message) {
+        return "Fail".equals(message.getType());
+    }
+
+    // Method to show an error dialog
+    private void showErrorDialog(String errorMessage) {
+        JOptionPane.showMessageDialog(new JFrame(), errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    // Method to show the command dialog and return the user's choice
+    private int showCommandDialog(String[] commands) {
+        return JOptionPane.showOptionDialog(null,
+                "Select a command",
+                "ATM Menu",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                commands,
+                commands[commands.length - 1]);
+    }
 }
