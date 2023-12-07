@@ -66,7 +66,7 @@ public class Client {
 			String option = JOptionPane.showInputDialog("Enter Teller for teller or Atm for atm");
 			String finalop = option.toUpperCase();
 			
-			
+			// 134.154.54.102
             new Client("localhost", 3005, finalop); // Replace with actual server address and port
         } catch (IOException e) {
             e.printStackTrace();
